@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Painel · Magioni</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0f1226" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎛️</text></svg>" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <!-- Login -->
+  <div class="wrap hidden" id="login-view">
+    <div class="card center-card">
+      <p class="eyebrow">Área do artista</p>
+      <h2 style="font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:30px;margin:0 0 16px">Entrar</h2>
+      <form id="login-form">
+        <label class="field"><span>E-mail</span><input class="input" type="email" name="email" required autocomplete="email" /></label>
+        <label class="field"><span>Senha</span><input class="input" type="password" name="password" autocomplete="current-password" /></label>
+        <button class="btn block" type="submit">Entrar</button>
+      </form>
+      <p class="item-meta" style="margin:14px 0 6px">Sem senha? Receba um link de acesso no e-mail:</p>
+      <button class="btn ghost block" id="magic-btn" type="button">Enviar link por e-mail</button>
+      <p class="item-meta" style="margin-top:16px"><a href="/">← Voltar ao site</a></p>
+    </div>
+  </div>
+
+  <!-- Sem permissão -->
+  <div class="wrap hidden" id="denied-view">
+    <div class="card center-card">
+      <h2 style="margin-top:0">Sem acesso</h2>
+      <p>A conta <strong id="denied-email"></strong> não está cadastrada como administradora deste site.</p>
+      <button class="btn ghost" id="denied-logout">Sair</button>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div class="wrap hidden" id="app-view">
+    <div class="admin-top">
+      <h1>Painel <span>Magioni</span></h1>
+      <div class="row">
+        <a class="btn ghost small" href="/" target="_blank" rel="noopener">Ver site</a>
+        <button class="btn ghost small" id="logout">Sair</button>
+      </div>
+    </div>
+    <nav class="admin-nav" role="tablist">
+      <button class="tab" data-view="requests" aria-pressed="true">Pedidos<span class="badge hidden" id="badge-req"></span></button>
+      <button class="tab" data-view="repertoire" aria-pressed="false">Repertório</button>
+      <button class="tab" data-view="comments" aria-pressed="false">Recados<span class="badge hidden" id="badge-com"></span></button>
+      <button class="tab" data-view="settings" aria-pressed="false">Configurações</button>
+    </nav>
+
+    <section id="view-requests" class="view">
+      <div class="toolbar">
+        <button class="tab" data-status="pendente" aria-pressed="true">Pendentes</button>
+        <button class="tab" data-status="tocada" aria-pressed="false">Tocadas</button>
+        <button class="tab" data-status="recusada" aria-pressed="false">Recusadas</button>
+        <button class="tab" data-status="all" aria-pressed="false">Todos</button>
+        <span style="flex:1"></span>
+        <label class="row item-meta"><input type="checkbox" class="switch" id="req-open" /> Receber pedidos</label>
+      </div>
+      <div id="top-songs"></div>
+      <div class="list" id="req-list"></div>
+      <div class="toolbar" style="margin-top:16px">
+        <button class="btn danger small" id="clear-done">Apagar tocadas e recusadas</button>
+      </div>
+    </section>
+
+    <section id="view-repertoire" class="view hidden">
+      <p class="item-meta" style="margin-top:0">Edite direto nos campos (salva ao sair do campo). Desmarque a caixinha para esconder a música do site sem apagar.</p>
+      <div id="rep-list"></div>
+      <form class="card rep-cat" id="add-cat">
+        <div class="row">
+          <input class="input" name="name" placeholder="Nova categoria (ex.: Pagode)" maxlength="80" required />
+          <button class="btn" type="submit">Adicionar</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="view-comments" class="view hidden">
+      <div class="toolbar">
+        <button class="btn ghost small" id="mark-all-read">Marcar todos como lidos</button>
+      </div>
+      <div class="list" id="com-list"></div>
+    </section>
+
+    <section id="view-settings" class="view hidden">
+      <form class="card" id="settings-form">
+        <label class="field"><span>Nome artístico</span><input class="input" name="artist_name" maxlength="80" required /></label>
+        <label class="field"><span>Frase de destaque</span><input class="input" name="tagline" maxlength="140" /></label>
+        <label class="field"><span>Instagram (sem @)</span><input class="input" name="instagram" maxlength="60" /></label>
+        <label class="field"><span>Chave Pix</span><input class="input" name="pix_key" maxlength="120" /></label>
+        <label class="field"><span>Link do Spotify</span><input class="input" name="spotify_url" type="url" placeholder="https://open.spotify.com/…" /></label>
+        <label class="field"><span>Nome do EP / álbum</span><input class="input" name="ep_name" maxlength="80" /></label>
+        <button class="btn" type="submit">Salvar</button>
+      </form>
+    </section>
+    <div style="height:40px"></div>
+  </div>
+
+  <script type="module" src="/assets/admin.js"></script>
+</body>
+</html>

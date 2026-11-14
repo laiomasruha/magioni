@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Magioni · À la carte</title>
+  <meta name="description" content="Cardápio musical do Magioni: escolha sua música e faça seu pedido." />
+  <meta name="theme-color" content="#0f1226" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎸</text></svg>" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">À la carte com</p>
+      <h1 id="artist-name">Magioni<span>.</span></h1>
+      <p class="tagline" id="tagline">Cardápio musical · Escolha o seu clima</p>
+      <div class="chips" id="links"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="block" id="pedido">
+      <h2>Faça seu pedido</h2>
+      <p class="sub">Toque na música que você quer ouvir.</p>
+      <div class="notice hidden" id="closed">Os pedidos estão fechados no momento. Mas dá pra deixar um recado lá embaixo!</div>
+
+      <div class="sticky">
+        <input class="search" id="search" type="search" placeholder="Buscar música ou artista…" autocomplete="off" aria-label="Buscar música ou artista" />
+        <div class="tabs" id="tabs" role="toolbar" aria-label="Estilos"></div>
+      </div>
+
+      <div id="repertoire"><p class="empty">Carregando repertório…</p></div>
+    </section>
+
+    <section class="block" id="recado">
+      <h2>Mande um recado</h2>
+      <p class="sub">Elogio, sugestão de música, dedicatória… vai direto pro Magioni.</p>
+      <form class="card" id="comment-form">
+        <label class="field"><span>Seu nome (opcional)</span>
+          <input class="input" name="name" maxlength="80" autocomplete="name" />
+        </label>
+        <label class="field"><span>Mensagem</span>
+          <textarea class="input" name="message" maxlength="1000" required></textarea>
+        </label>
+        <button class="btn" type="submit">Enviar recado</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Magioni · Rock · Brasilidades · Reggae · Forró</span>
+      <a href="/admin">Área do artista</a>
+    </div>
+  </footer>
+
+  <dialog id="req-dialog" aria-labelledby="dlg-song">
+    <form method="dialog" class="dlg-body" id="req-form">
+      <p class="eyebrow">Seu pedido</p>
+      <p class="dlg-song" id="dlg-song"></p>
+      <p class="dlg-artist" id="dlg-artist"></p>
+      <label class="field"><span>Seu nome (opcional)</span>
+        <input class="input" name="name" maxlength="80" autocomplete="name" />
+      </label>
+      <label class="field"><span>Dedicatória ou recado (opcional)</span>
+        <textarea class="input" name="note" maxlength="500" rows="3"></textarea>
+      </label>
+      <div class="dlg-actions">
+        <button class="btn ghost" value="cancel" type="button" id="dlg-cancel">Cancelar</button>
+        <button class="btn" type="submit" id="dlg-send">Pedir essa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/assets/public.js"></script>
+</body>
+</html>
