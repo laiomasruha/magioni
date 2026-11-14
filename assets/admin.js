@@ -434,7 +434,7 @@ $('#settings-form').addEventListener('submit', async (e) => {
     const v = f.elements[k].value.trim();
     patch[k] = v || null;
   });
-  patch.artist_name = patch.artist_name || 'Magioni';
+  patch.artist_name = patch.artist_name || 'Mag!on!';
   patch.tagline = patch.tagline || '';
   if (patch.instagram) patch.instagram = patch.instagram.replace(/^@/, '');
   const { error } = await sb.from('magioni_settings').update(patch).eq('id', 1);

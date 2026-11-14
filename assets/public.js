@@ -30,7 +30,10 @@ async function load() {
 function renderHeader() {
   const st = state.settings;
   if (st.artist_name) {
-    $('#artist-name').innerHTML = `${esc(st.artist_name)}<span>.</span>`;
+    const name = esc(st.artist_name);
+    $('#artist-name').innerHTML = /[.!?]$/.test(st.artist_name)
+      ? name.replace(/!/g, '<span>!</span>')
+      : `${name}<span>.</span>`;
     document.title = `${st.artist_name} · À la carte`;
   }
   if (st.tagline) $('#tagline').textContent = st.tagline;
