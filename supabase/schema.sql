@@ -1,4 +1,4 @@
--- Esquema do site Magioni (já aplicado no projeto Supabase "gigstation-dev").
+-- Esquema do site Magioni (já aplicado no projeto Supabase "Magioni").
 -- Para recriar em outro projeto: rode este arquivo, depois seed.sql, depois
 --   insert into public.magioni_admins(email) values ('seu-email@exemplo.com');
 
