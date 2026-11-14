@@ -67,6 +67,29 @@ $('#magic-btn').addEventListener('click', async () => {
   else toast('Link enviado! Confira sua caixa de entrada.');
 });
 
+$('#signup-btn').addEventListener('click', async () => {
+  const f = $('#login-form').elements;
+  const email = f.email.value.trim();
+  const password = f.password.value;
+  if (!email || password.length < 8) {
+    toast('Preencha o e-mail e uma senha com pelo menos 8 caracteres.', 'err');
+    return;
+  }
+  const btn = $('#signup-btn');
+  btn.disabled = true;
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: `${location.origin}/admin` },
+  });
+  btn.disabled = false;
+  if (error) {
+    toast(/registered|exists/i.test(error.message) ? 'Essa conta já existe. Use "Entrar".' : 'Não foi possível criar a conta.', 'err');
+    return;
+  }
+  if (!data.session) toast('Conta criada! Confirme pelo link que chegou no seu e-mail.');
+});
+
 const logout = async () => {
   await sb.auth.signOut();
   show('login');
