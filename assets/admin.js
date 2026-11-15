@@ -33,6 +33,7 @@ async function onSession(session) {
     return;
   }
   show('app');
+  $('#me-email').textContent = session.user.email || '';
   await Promise.all([loadSettings(), loadRequests(), loadComments(), loadRepertoire()]);
   startPolling();
 }
@@ -61,33 +62,10 @@ $('#magic-btn').addEventListener('click', async () => {
   }
   const { error } = await sb.auth.signInWithOtp({
     email,
-    options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}/admin` },
+    options: { shouldCreateUser: true, emailRedirectTo: `${location.origin}/admin` },
   });
-  if (error) toast('Não foi possível enviar o link. Confira o e-mail.', 'err');
+  if (error) toast('Este e-mail não tem acesso ao painel.', 'err');
   else toast('Link enviado! Confira sua caixa de entrada.');
-});
-
-$('#signup-btn').addEventListener('click', async () => {
-  const f = $('#login-form').elements;
-  const email = f.email.value.trim();
-  const password = f.password.value;
-  if (!email || password.length < 8) {
-    toast('Preencha o e-mail e uma senha com pelo menos 8 caracteres.', 'err');
-    return;
-  }
-  const btn = $('#signup-btn');
-  btn.disabled = true;
-  const { data, error } = await sb.auth.signUp({
-    email,
-    password,
-    options: { emailRedirectTo: `${location.origin}/admin` },
-  });
-  btn.disabled = false;
-  if (error) {
-    toast(/registered|exists/i.test(error.message) ? 'Essa conta já existe. Use "Entrar".' : 'Não foi possível criar a conta.', 'err');
-    return;
-  }
-  if (!data.session) toast('Conta criada! Confirme pelo link que chegou no seu e-mail.');
 });
 
 const logout = async () => {
@@ -439,6 +417,16 @@ $('#settings-form').addEventListener('submit', async (e) => {
   if (patch.instagram) patch.instagram = patch.instagram.replace(/^@/, '');
   const { error } = await sb.from('magioni_settings').update(patch).eq('id', 1);
   toast(error ? 'Erro ao salvar.' : 'Configurações salvas.', error ? 'err' : 'ok');
+});
+
+$('#password-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const password = e.target.elements.password.value;
+  if (password.length < 8) return toast('A senha precisa ter pelo menos 8 caracteres.', 'err');
+  const { error } = await sb.auth.updateUser({ password });
+  if (error) return toast('Não foi possível definir a senha.', 'err');
+  e.target.reset();
+  toast('Senha definida. Da próxima vez, entre com e-mail e senha.');
 });
 
 boot();

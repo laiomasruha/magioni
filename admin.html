@@ -20,10 +20,8 @@
         <label class="field"><span>Senha</span><input class="input" type="password" name="password" autocomplete="current-password" /></label>
         <button class="btn block" type="submit">Entrar</button>
       </form>
-      <p class="item-meta" style="margin:14px 0 6px">Sem senha? Receba um link de acesso no e-mail:</p>
+      <p class="item-meta" style="margin:14px 0 6px">Primeiro acesso ou esqueceu a senha? Receba um link de acesso no e-mail:</p>
       <button class="btn ghost block" id="magic-btn" type="button">Enviar link por e-mail</button>
-      <p class="item-meta" style="margin:14px 0 6px">Primeiro acesso? Preencha e-mail e uma senha nova (mín. 8 caracteres):</p>
-      <button class="btn ghost block" id="signup-btn" type="button">Criar minha senha</button>
       <p class="item-meta" style="margin-top:16px"><a href="/">← Voltar ao site</a></p>
     </div>
   </div>
@@ -96,6 +94,11 @@
         <label class="field"><span>Link do Spotify</span><input class="input" name="spotify_url" type="url" placeholder="https://open.spotify.com/…" /></label>
         <label class="field"><span>Nome do EP / álbum</span><input class="input" name="ep_name" maxlength="80" /></label>
         <button class="btn" type="submit">Salvar</button>
+      </form>
+      <form class="card" id="password-form" style="margin-top:14px">
+        <p class="item-meta" style="margin:0 0 10px">Conectado como <strong id="me-email"></strong></p>
+        <label class="field"><span>Nova senha (mín. 8 caracteres)</span><input class="input" type="password" name="password" minlength="8" autocomplete="new-password" required /></label>
+        <button class="btn ghost" type="submit">Definir senha</button>
       </form>
     </section>
     <div style="height:40px"></div>

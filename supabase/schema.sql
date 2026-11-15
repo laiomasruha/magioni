@@ -116,3 +116,19 @@ grant insert, update, delete on public.magioni_categories, public.magioni_songs 
 grant update on public.magioni_settings to authenticated;
 grant select on public.magioni_admins to authenticated;
 grant execute on function public.magioni_is_admin() to anon, authenticated;
+
+-- Só e-mails da lista magioni_admins podem ter conta no projeto
+create or replace function public.magioni_block_unlisted_users()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if new.email is null or not exists (select 1 from public.magioni_admins a where a.email = lower(new.email)) then
+    raise exception 'Cadastro não permitido para este e-mail';
+  end if;
+  return new;
+end;
+$$;
+revoke execute on function public.magioni_block_unlisted_users() from public, anon, authenticated;
+
+create trigger magioni_only_listed_users
+  before insert or update of email on auth.users
+  for each row execute function public.magioni_block_unlisted_users();

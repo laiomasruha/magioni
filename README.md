@@ -15,13 +15,16 @@ Site estático (HTML + CSS + JS, sem build) hospedado na Vercel. Os dados ficam 
 | `magioni_requests` | só envia (com pedidos abertos e música ativa) | lê, muda status, apaga |
 | `magioni_comments` | só envia | lê, marca como lido, apaga |
 
-Quem pode entrar no painel é definido pela tabela `magioni_admins` (por e-mail). Para adicionar alguém:
+Só existem contas para os e-mails da tabela `magioni_admins` (hoje: laiomasruha@gmail.com e cantormagioni@gmail.com). Um gatilho no banco recusa a criação de conta para qualquer outro e-mail, e o painel não tem tela de cadastro.
+
+- **Primeiro acesso / esqueceu a senha:** em `/admin`, digite o e-mail e toque em "Enviar link por e-mail".
+- **Definir senha:** depois de entrar, em Configurações → "Definir senha".
+
+Para liberar outro e-mail:
 
 ```sql
 insert into public.magioni_admins (email) values ('email@exemplo.com');
 ```
-
-A pessoa precisa ter uma conta no Supabase Auth desse projeto (e-mail + senha, ou entrar pelo link enviado por e-mail).
 
 ## Deploy na Vercel
 
