@@ -141,7 +141,7 @@ $$('[data-more="youtube"]').forEach((p) => {
       io.disconnect();
       box.innerHTML = `<iframe title="Mag!on! no Spotify" src="${esc(SITE.links.spotifyEmbed)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
     }, { rootMargin: '600px' });
-    io.observe(box);
+    io.observe(box.closest('section'));
   } else box.remove();
 }
 
