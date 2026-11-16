@@ -67,7 +67,12 @@
           <label class="row item-meta" style="margin-bottom:12px"><input type="checkbox" class="switch" name="geo_enabled" /> Ativar limite por distância</label>
           <label class="field"><span>Nome do local (opcional)</span><input class="input" name="geo_label" maxlength="120" placeholder="Ex.: Pedra Azul Beer" /></label>
           <div class="field"><span>Local do show</span>
-            <div class="row" style="flex-wrap:wrap">
+            <div class="geo-search">
+              <input class="input" id="geo-q" placeholder="Endereço ou nome do lugar (ex.: Rua Sete, 100, Vitória)" autocomplete="off" />
+              <button class="btn small" type="button" id="geo-find">Buscar</button>
+            </div>
+            <div class="geo-results" id="geo-results"></div>
+            <div class="row" style="flex-wrap:wrap;margin-top:8px">
               <button class="btn ghost small" type="button" id="geo-here">Usar minha localização atual</button>
               <span class="item-meta" id="geo-where">Nenhum local definido</span>
             </div>
@@ -83,7 +88,7 @@
             </select>
           </label>
           <button class="btn" type="submit">Salvar</button>
-          <p class="item-meta" style="margin:10px 0 0">Dica: abra o painel no local do show e toque em “Usar minha localização atual”. O GPS do celular pode errar algumas dezenas de metros, principalmente em lugar fechado, então 200 a 300 m costuma funcionar bem.</p>
+          <p class="item-meta" style="margin:10px 0 0">Dica: busque pelo endereço ou, no local do show, toque em “Usar minha localização atual”. Também dá para colar coordenadas (ex.: -20.3155, -40.3128). Busca de endereços: © OpenStreetMap. O GPS do celular pode errar algumas dezenas de metros, principalmente em lugar fechado, então 200 a 300 m costuma funcionar bem.</p>
         </form>
       </details>
       <div id="top-songs"></div>

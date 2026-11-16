@@ -237,3 +237,8 @@ footer a { color: var(--muted); }
 .geo-card summary::-webkit-details-marker { display: none; }
 .geo-card .field > span { display: block; }
 #geo-form select.input { appearance: auto; }
+.geo-search { display: flex; gap: 6px; }
+.geo-search .input { flex: 1; }
+.geo-results { display: grid; gap: 6px; margin-top: 8px; }
+.geo-opt { text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--ink); color: var(--paper); font-size: 14px; line-height: 1.35; cursor: pointer; }
+.geo-opt:hover, .geo-opt:focus-visible { border-color: var(--amber); outline: none; }

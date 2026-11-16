@@ -446,6 +446,46 @@ $('#geo-here').addEventListener('click', () => {
     { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
   );
 });
+// Busca por endereço (OpenStreetMap / Nominatim) ou coordenadas coladas
+async function geoFind() {
+  const q = $('#geo-q').value.trim();
+  const box = $('#geo-results');
+  if (!q) return;
+  const m = q.match(/^\s*(-?\d{1,2}(?:[.,]\d+)?)\s*[,; ]\s*(-?\d{1,3}(?:[.,]\d+)?)\s*$/);
+  if (m) {
+    const lat = Number(m[1].replace(',', '.')), lng = Number(m[2].replace(',', '.'));
+    if (Math.abs(lat) <= 90 && Math.abs(lng) <= 180) {
+      geoDraft.lat = lat; geoDraft.lng = lng; box.innerHTML = ''; showWhere();
+      return toast('Coordenadas definidas. Toque em Salvar.');
+    }
+  }
+  const btn = $('#geo-find');
+  btn.disabled = true; btn.textContent = 'Buscando…';
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&countrycodes=br&accept-language=pt-BR&q=${encodeURIComponent(q)}`;
+    const r = await fetch(url, { headers: { Accept: 'application/json' } });
+    const list = r.ok ? await r.json() : [];
+    box.innerHTML = list.length
+      ? list.map((x, i) => `<button type="button" class="geo-opt" data-i="${i}">${esc(x.display_name)}</button>`).join('')
+      : '<p class="item-meta">Nenhum lugar encontrado. Tente com cidade e bairro, ou use a localização atual.</p>';
+    box.querySelectorAll('.geo-opt').forEach((b) => b.addEventListener('click', () => {
+      const x = list[+b.dataset.i];
+      geoDraft.lat = Number(x.lat); geoDraft.lng = Number(x.lon);
+      const f = $('#geo-form').elements;
+      if (!f.geo_label.value.trim()) f.geo_label.value = (x.name || x.display_name.split(',')[0]).slice(0, 120);
+      box.innerHTML = `<p class="item-meta">Selecionado: ${esc(x.display_name)}</p>`;
+      showWhere();
+      toast('Local definido. Toque em Salvar.');
+    }));
+  } catch {
+    box.innerHTML = '<p class="item-meta">Não foi possível buscar agora. Tente de novo em instantes.</p>';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Buscar';
+  }
+}
+$('#geo-find').addEventListener('click', geoFind);
+$('#geo-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); geoFind(); } });
+
 $('#geo-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target.elements;
