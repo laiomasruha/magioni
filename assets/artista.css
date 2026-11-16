@@ -141,6 +141,16 @@ h3 { font-size: 1.15rem; line-height: 1.25; font-weight: 700; }
   margin-left: -.03em;
   white-space: nowrap;
 }
+/* Nome com efeito desgastado (rachaduras, riscos e falhas de tinta).
+   Textura gerada por scripts/gerar-desgaste.py; escala junto com o tamanho da letra. */
+.wordmark, .brand {
+  -webkit-mask-image: url(/assets/desgaste.png);
+  mask-image: url(/assets/desgaste.png);
+  -webkit-mask-size: 5em auto;
+  mask-size: 5em auto;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
 .hero-line { max-width: 30em; margin-top: clamp(14px, 2.4vw, 26px); font-size: clamp(1.05rem, 2.4vw, 1.35rem); line-height: 1.4; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .hero-cta .btn { flex: 1 1 auto; max-width: 260px; padding-inline: 16px; }
