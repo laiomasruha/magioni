@@ -20,10 +20,16 @@
   </header>
 
   <main class="wrap">
-    <section class="block" id="pedido">
+    <section class="block gate hidden" id="gate" aria-live="polite">
+      <p class="gate-icon" id="gate-icon" aria-hidden="true">🎸</p>
+      <h2 id="gate-title">Carregando…</h2>
+      <p class="sub" id="gate-text"></p>
+      <button class="btn hidden" type="button" id="gate-btn"></button>
+    </section>
+
+    <section class="block hidden" id="pedido">
       <h2>Faça seu pedido</h2>
       <p class="sub">Toque na música que você quer ouvir.</p>
-      <div class="notice hidden" id="closed">Os pedidos estão fechados no momento. Mas dá pra deixar um recado lá embaixo!</div>
 
       <div class="sticky">
         <input class="search" id="search" type="search" placeholder="Buscar música ou artista…" autocomplete="off" aria-label="Buscar música ou artista" />
@@ -33,7 +39,7 @@
       <div id="repertoire"><p class="empty">Carregando repertório…</p></div>
     </section>
 
-    <section class="block" id="recado">
+    <section class="block hidden" id="recado">
       <h2>Mande um recado</h2>
       <p class="sub">Elogio, sugestão de música, dedicatória… vai direto pro Mag!on!</p>
       <form class="card" id="comment-form">

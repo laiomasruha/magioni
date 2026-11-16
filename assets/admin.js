@@ -404,7 +404,64 @@ async function loadSettings() {
   const f = $('#settings-form');
   ['artist_name', 'tagline', 'instagram', 'pix_key', 'spotify_url', 'ep_name'].forEach((k) => (f.elements[k].value = data[k] || ''));
   $('#req-open').checked = !!data.requests_open;
+  fillGeo(data);
 }
+
+/* ---------------- Limite por distância ---------------- */
+const geoDraft = { lat: null, lng: null };
+function fillGeo(d) {
+  const f = $('#geo-form').elements;
+  f.geo_enabled.checked = !!d.geo_enabled;
+  f.geo_label.value = d.geo_label || '';
+  f.geo_radius_m.value = String(d.geo_radius_m || 300);
+  if (![...f.geo_radius_m.options].some((o) => o.selected)) f.geo_radius_m.value = '300';
+  geoDraft.lat = d.geo_lat; geoDraft.lng = d.geo_lng;
+  showWhere();
+  const on = d.geo_enabled && d.geo_lat != null;
+  const st = $('#geo-status');
+  st.textContent = on ? 'ativo' : 'desligado';
+  st.className = `status ${on ? 'tocada' : 'recusada'}`;
+}
+function showWhere(acc) {
+  const el = $('#geo-where');
+  if (geoDraft.lat == null) { el.textContent = 'Nenhum local definido'; return; }
+  const url = `https://www.google.com/maps?q=${geoDraft.lat},${geoDraft.lng}`;
+  el.innerHTML = `<a href="${url}" target="_blank" rel="noopener">Ver no mapa</a>${acc ? ` · precisão de ~${Math.round(acc)} m` : ''}`;
+}
+$('#geo-here').addEventListener('click', () => {
+  if (!('geolocation' in navigator)) return toast('Este navegador não informa a localização.', 'err');
+  const btn = $('#geo-here');
+  btn.disabled = true; btn.textContent = 'Localizando…';
+  navigator.geolocation.getCurrentPosition(
+    (p) => {
+      geoDraft.lat = p.coords.latitude; geoDraft.lng = p.coords.longitude;
+      showWhere(p.coords.accuracy);
+      btn.disabled = false; btn.textContent = 'Usar minha localização atual';
+      toast('Local capturado. Toque em Salvar.');
+    },
+    (err) => {
+      btn.disabled = false; btn.textContent = 'Usar minha localização atual';
+      toast(err.code === 1 ? 'Permita o acesso à localização no navegador.' : 'Não foi possível obter a localização.', 'err');
+    },
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
+  );
+});
+$('#geo-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target.elements;
+  if (f.geo_enabled.checked && geoDraft.lat == null) return toast('Defina o local do show antes de ativar.', 'err');
+  const patch = {
+    geo_enabled: f.geo_enabled.checked,
+    geo_label: f.geo_label.value.trim() || null,
+    geo_radius_m: Number(f.geo_radius_m.value),
+    geo_lat: geoDraft.lat, geo_lng: geoDraft.lng,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await sb.from('magioni_settings').update(patch).eq('id', 1);
+  if (error) return toast('Erro ao salvar.', 'err');
+  toast(patch.geo_enabled ? 'Limite por distância ativado.' : 'Limite por distância desligado.');
+  loadSettings();
+});
 
 $('#settings-form').addEventListener('submit', async (e) => {
   e.preventDefault();

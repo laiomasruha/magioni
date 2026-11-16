@@ -249,3 +249,15 @@ safe(() => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 });
+
+/* Cardápio musical: os botões só aparecem quando o artista está recebendo pedidos */
+safe(async () => {
+  const URL_ = 'https://phjfzcfmjnwufjmmjnke.supabase.co/rest/v1/magioni_settings?id=eq.1&select=requests_open';
+  const KEY_ = 'sb_publishable_Diqn3xciul137uTioeaLMQ_WuM9jJxE';
+  try {
+    const r = await fetch(URL_, { headers: { apikey: KEY_, Authorization: `Bearer ${KEY_}` } });
+    const [row] = await r.json();
+    const open = !!(row && row.requests_open);
+    $$('[data-cardapio]').forEach((el) => { el.hidden = !open; });
+  } catch { /* sem conexão: mantém escondido */ }
+});

@@ -61,6 +61,31 @@
         <span style="flex:1"></span>
         <label class="row item-meta"><input type="checkbox" class="switch" id="req-open" /> Receber pedidos</label>
       </div>
+      <details class="card geo-card" id="geo-card">
+        <summary><span>📍 Só liberar o cardápio perto do show</span> <span class="status" id="geo-status"></span></summary>
+        <form id="geo-form" style="margin-top:12px">
+          <label class="row item-meta" style="margin-bottom:12px"><input type="checkbox" class="switch" name="geo_enabled" /> Ativar limite por distância</label>
+          <label class="field"><span>Nome do local (opcional)</span><input class="input" name="geo_label" maxlength="120" placeholder="Ex.: Pedra Azul Beer" /></label>
+          <div class="field"><span>Local do show</span>
+            <div class="row" style="flex-wrap:wrap">
+              <button class="btn ghost small" type="button" id="geo-here">Usar minha localização atual</button>
+              <span class="item-meta" id="geo-where">Nenhum local definido</span>
+            </div>
+          </div>
+          <label class="field"><span>Raio permitido</span>
+            <select class="input" name="geo_radius_m">
+              <option value="100">100 m</option>
+              <option value="200">200 m</option>
+              <option value="300">300 m</option>
+              <option value="500">500 m</option>
+              <option value="1000">1 km</option>
+              <option value="3000">3 km</option>
+            </select>
+          </label>
+          <button class="btn" type="submit">Salvar</button>
+          <p class="item-meta" style="margin:10px 0 0">Dica: abra o painel no local do show e toque em “Usar minha localização atual”. O GPS do celular pode errar algumas dezenas de metros, principalmente em lugar fechado, então 200 a 300 m costuma funcionar bem.</p>
+        </form>
+      </details>
       <div id="top-songs"></div>
       <div class="list" id="req-list"></div>
       <div class="toolbar" style="margin-top:16px">

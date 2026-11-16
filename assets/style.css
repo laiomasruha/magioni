@@ -224,3 +224,16 @@ footer a { color: var(--muted); }
 .kit-row .input { padding: 8px 10px; font-size: 14px; }
 @media (max-width: 560px) { .kit-row { grid-template-columns: 1fr auto auto; } .kit-row [data-field="description"] { grid-column: 1 / 2; grid-row: 2; } }
 #view-contratantes select.input { appearance: auto; }
+
+/* Cardápio fechado / fora da área */
+.gate { text-align: center; padding: 56px 0 72px; max-width: 520px; margin: 0 auto; }
+.gate-icon { font-size: 44px; margin: 0 0 8px; }
+.gate h2 { font-size: clamp(30px, 8vw, 40px); line-height: 1.05; }
+.gate .sub { font-size: 16px; line-height: 1.5; margin: 10px 0 22px; }
+
+/* Painel: limite por distância */
+.geo-card { margin-bottom: 14px; padding: 14px 18px; }
+.geo-card summary { cursor: pointer; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 10px; list-style: none; }
+.geo-card summary::-webkit-details-marker { display: none; }
+.geo-card .field > span { display: block; }
+#geo-form select.input { appearance: auto; }

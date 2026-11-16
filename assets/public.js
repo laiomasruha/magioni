@@ -6,7 +6,7 @@ const ICONS = {
   sp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M7 9.5c3.5-1 7-.6 10 1M7.5 12.8c3-.8 5.8-.4 8.3.9M8 16c2.3-.6 4.4-.3 6.3.7"/></svg>',
 };
 
-const state = { settings: null, cats: [], songs: [], filter: 'all', q: '', selected: null };
+const state = { settings: null, cats: [], songs: [], filter: 'all', q: '', selected: null, pos: null, geo: 'idle' };
 const COOLDOWN_MS = 20_000;
 
 async function load() {
@@ -25,7 +25,103 @@ async function load() {
   renderHeader();
   renderTabs();
   renderList();
+  applyAccess();
+  if (state.settings.requests_open && geoOn(state.settings)) autoLocate();
 }
+
+/* ───── Acesso: pedidos abertos e (se ativo) distância do show ───── */
+function distanceM(lat1, lng1, lat2, lng2) {
+  const r = (d) => (d * Math.PI) / 180;
+  const a = Math.sin(r(lat2 - lat1) / 2) ** 2 + Math.cos(r(lat1)) * Math.cos(r(lat2)) * Math.sin(r(lng2 - lng1) / 2) ** 2;
+  return 2 * 6371000 * Math.asin(Math.sqrt(a));
+}
+const fmtDist = (m) => (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(m < 10000 ? 1 : 0).replace('.', ',')} km`);
+const geoOn = (st) => st.geo_enabled && st.geo_lat != null && st.geo_lng != null;
+
+function showMenu(on) {
+  $('#pedido').classList.toggle('hidden', !on);
+  $('#recado').classList.toggle('hidden', !on);
+  $('#gate').classList.toggle('hidden', on);
+  if (!on && $('#req-dialog').open) $('#req-dialog').close();
+}
+
+function gate(icon, title, text, btnLabel, onClick) {
+  showMenu(false);
+  $('#gate-icon').textContent = icon;
+  $('#gate-title').textContent = title;
+  $('#gate-text').textContent = text;
+  const b = $('#gate-btn');
+  b.classList.toggle('hidden', !btnLabel);
+  b.textContent = btnLabel || '';
+  b.onclick = onClick || null;
+}
+
+function applyAccess() {
+  const st = state.settings || {};
+  const name = st.artist_name || 'Mag!on!';
+  if (!st.requests_open) {
+    return gate('🌙', `${name} não está tocando agora`,
+      'O cardápio musical abre durante os shows. Quando ele estiver no palco, é só voltar aqui e escolher a sua música.');
+  }
+  if (!geoOn(st)) return showMenu(true);
+
+  const place = st.geo_label ? ` (${st.geo_label})` : '';
+  if (state.pos) {
+    const d = distanceM(st.geo_lat, st.geo_lng, state.pos.lat, state.pos.lng);
+    if (d <= st.geo_radius_m) return showMenu(true);
+    return gate('📍', 'Você está longe do show',
+      `O cardápio só funciona no local do show${place}. Pela sua localização, você está a uns ${fmtDist(d)} de lá.`,
+      'Tentar de novo', locate);
+  }
+  if (state.geo === 'locating') return gate('📡', 'Conferindo sua localização…', 'Isso leva só alguns segundos.');
+  if (state.geo === 'denied') {
+    return gate('📍', 'Precisamos da sua localização',
+      'O cardápio só abre para quem está no show. Permita o acesso à localização nas configurações do navegador e tente de novo.',
+      'Tentar de novo', locate);
+  }
+  if (state.geo === 'error') {
+    return gate('📍', 'Não deu para achar sua localização',
+      'Confira se a localização do celular está ligada e tente de novo.', 'Tentar de novo', locate);
+  }
+  return gate('🎸', 'Você está no show?',
+    `Para pedir músicas, confirme que você está no local${place}. A localização é usada só para isso e não fica guardada.`,
+    'Estou no show, abrir o cardápio', locate);
+}
+
+function locate() {
+  if (!('geolocation' in navigator)) { state.geo = 'error'; return applyAccess(); }
+  state.geo = 'locating';
+  applyAccess();
+  navigator.geolocation.getCurrentPosition(
+    (p) => { state.pos = { lat: p.coords.latitude, lng: p.coords.longitude }; state.geo = 'ok'; applyAccess(); },
+    (err) => { state.geo = err.code === 1 ? 'denied' : 'error'; applyAccess(); },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
+  );
+}
+
+// Se a pessoa já autorizou antes, confere a localização sem precisar tocar no botão
+async function autoLocate() {
+  try {
+    const p = await navigator.permissions?.query({ name: 'geolocation' });
+    if (p && p.state === 'granted') locate();
+  } catch { /* navegador sem suporte */ }
+}
+
+// Confere a cada minuto se o artista abriu/fechou os pedidos ou mudou a área
+async function refreshSettings() {
+  const { data } = await sb.from('magioni_settings').select('*').eq('id', 1).maybeSingle();
+  if (!data) return;
+  const was = state.settings || {};
+  state.settings = data;
+  if (geoOn(data) && !state.pos && state.geo === 'idle' && data.requests_open) autoLocate();
+  if (was.requests_open !== data.requests_open || was.geo_enabled !== data.geo_enabled
+      || was.geo_lat !== data.geo_lat || was.geo_lng !== data.geo_lng || was.geo_radius_m !== data.geo_radius_m) {
+    renderList();
+    applyAccess();
+  }
+}
+setInterval(() => { if (!document.hidden) refreshSettings(); }, 60_000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshSettings(); });
 
 function renderHeader() {
   const st = state.settings;
@@ -37,7 +133,6 @@ function renderHeader() {
     document.title = `${st.artist_name} · À la carte`;
   }
   if (st.tagline) $('#tagline').textContent = st.tagline;
-  $('#closed').classList.toggle('hidden', !!st.requests_open);
 
   const links = [];
   if (st.instagram) {
@@ -150,10 +245,13 @@ $('#req-form').addEventListener('submit', async (e) => {
     song_label: `${song.title} — ${song.artist}`,
     requester_name: name || null,
     note: note || null,
+    req_lat: state.pos?.lat ?? null,
+    req_lng: state.pos?.lng ?? null,
   });
   btn.disabled = false;
   if (error) {
     toast('Não deu pra enviar o pedido agora. Tente de novo.', 'err');
+    refreshSettings();
     return;
   }
   markSent('mg_last_req');
@@ -175,10 +273,13 @@ $('#comment-form').addEventListener('submit', async (e) => {
   const name = String(fd.get('name') || '').trim();
   const btn = e.target.querySelector('button');
   btn.disabled = true;
-  const { error } = await sb.from('magioni_comments').insert({ name: name || null, message });
+  const { error } = await sb.from('magioni_comments').insert({
+    name: name || null, message, req_lat: state.pos?.lat ?? null, req_lng: state.pos?.lng ?? null,
+  });
   btn.disabled = false;
   if (error) {
     toast('Não deu pra enviar o recado agora. Tente de novo.', 'err');
+    refreshSettings();
     return;
   }
   markSent('mg_last_msg');

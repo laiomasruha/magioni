@@ -132,3 +132,8 @@ revoke execute on function public.magioni_block_unlisted_users() from public, an
 create trigger magioni_only_listed_users
   before insert or update of email on auth.users
   for each row execute function public.magioni_block_unlisted_users();
+
+-- Limite por distância (ver migração magioni_geofence no projeto):
+-- magioni_settings.geo_enabled/geo_lat/geo_lng/geo_radius_m/geo_label,
+-- magioni_requests/comments.req_lat/req_lng, funções magioni_distance_m e
+-- magioni_menu_allows(lat, lng), usadas nas políticas de inserção.
