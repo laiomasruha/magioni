@@ -469,3 +469,4 @@ dialog:not([open]) { display: none; }
 #palcos .stage-list li:last-child { border-bottom: 1px solid var(--line); }
 #palcos .stages { align-items: start; }
 [hidden] { display: none !important; }
+.listen-icons { margin-top: 22px; }
