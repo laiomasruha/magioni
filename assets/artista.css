@@ -416,3 +416,24 @@ dialog:not([open]) { display: none; }
 .social-ico svg { width: 22px; height: 22px; fill: currentColor; }
 .social-ico:hover, .social-ico:focus-visible { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); transform: translateY(-2px); }
 .socials, .about-links { gap: 10px; }
+
+/* Ícones na abertura */
+.hero-socials { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(14px, 2.4vw, 24px); }
+.hero-socials .social-ico { background: rgba(8, 10, 23, .45); border-color: rgba(243, 241, 234, .35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+
+/* Chamada para a área do contratante */
+.ct-cta {
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between;
+  margin-top: clamp(40px, 7vw, 64px); padding: clamp(22px, 4vw, 36px);
+  background: var(--ink); color: var(--paper); border-radius: 6px;
+}
+.ct-cta h3 { font-size: 1.35rem; margin: 0 0 6px; }
+.ct-cta p { margin: 0; color: var(--muted); max-width: 34em; }
+.ct-cta .btn-ink { background: var(--amber); color: var(--amber-ink); }
+.ct-cta .btn-ink:hover { background: #ffc85c; }
+.btn-line { border-color: rgba(243, 241, 234, .55); color: var(--paper); }
+.btn-line:hover { background: var(--paper); color: var(--ink); }
+
+/* Botão no rodapé */
+.foot .foot-btn { margin-left: 0; min-height: 40px; padding: 6px 16px; font-size: .88rem; color: var(--paper); }
+.foot .foot-btn:hover { color: var(--ink); }

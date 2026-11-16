@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Mag!on! · Área do contratante</title>
+  <meta name="theme-color" content="#0a0c1b" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%230f1226'/><text x='50' y='78' font-size='80' font-family='Impact,sans-serif' text-anchor='middle' fill='%23f5b33b'>!</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://phjfzcfmjnwufjmmjnke.supabase.co" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" />
+  <link rel="stylesheet" href="/assets/artista.css?v=6" />
+  <link rel="stylesheet" href="/assets/contratante.css?v=1" />
+</head>
+<body class="ct">
+  <header class="top solid">
+    <a class="brand" href="/" aria-label="Mag!on!">Mag<b>!</b>on<b>!</b></a>
+    <button class="btn btn-ghost ct-exit hidden" id="exit" type="button">Sair</button>
+  </header>
+
+  <main>
+    <!-- Entrada com código -->
+    <section class="ct-gate" id="gate">
+      <div class="wrap ct-gate-in">
+        <p class="ct-kicker">Área do contratante</p>
+        <h1>Material para<br />produção e imprensa</h1>
+        <p class="lead">Press kit, rider técnico, fotos em alta resolução e logos do Mag<b>!</b>on<b>!</b>. Digite o código de acesso que você recebeu.</p>
+        <form class="ct-form" id="code-form" autocomplete="off">
+          <label class="sr" for="code">Código de acesso</label>
+          <input id="code" name="code" inputmode="text" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="Código de acesso" required />
+          <button class="btn btn-amber" type="submit" id="code-btn">Entrar</button>
+        </form>
+        <p class="ct-msg" id="msg" role="alert"></p>
+        <p class="ct-help">Não tem código? <a id="ask" href="#" target="_blank" rel="noopener">Peça pelo WhatsApp</a>.</p>
+      </div>
+    </section>
+
+    <!-- Material liberado -->
+    <div id="kit" class="hidden">
+      <section class="ct-head">
+        <div class="wrap">
+          <p class="ct-kicker">Área do contratante</p>
+          <h1>Material do Mag<b>!</b>on<b>!</b></h1>
+          <p class="lead" id="kit-for"></p>
+          <p class="fine">Os links de download valem por <span id="hours">12</span> horas. Depois disso é só entrar de novo com o mesmo código.</p>
+        </div>
+      </section>
+
+      <section class="sec sec-paper ct-sec" id="sec-presskit">
+        <div class="wrap">
+          <h2>Press kit</h2>
+          <div class="kit" id="list-presskit"></div>
+        </div>
+      </section>
+
+      <section class="sec sec-paper ct-sec" id="sec-rider">
+        <div class="wrap">
+          <div class="rider">
+            <div class="rider-head">
+              <h2>Rider técnico</h2>
+              <div class="btn-row" id="rider-actions"></div>
+            </div>
+            <dl class="specs">
+              <div><dt>Palco</dt><dd>Tablado de 4 × 4 m, no mínimo. Cobertura em caso de chuva.</dd></div>
+              <div><dt>Formação</dt><dd>Bateria, contrabaixo, teclado, guitarra, voz e violão.</dd></div>
+              <div><dt>Som</dt><dd>PA compatível com o espaço, mesa digital e técnico de som. Monitoramento individual.</dd></div>
+              <div><dt>Luz</dt><dd>6 PAR LED frontais e 4 laterais. Opcionais: 2 moving heads e máquina de fumaça.</dd></div>
+              <div><dt>Energia</dt><dd>2 tomadas 220 V, 20 A.</dd></div>
+              <div><dt>Montagem</dt><dd>2 horas de montagem e 1 hora de passagem de som.</dd></div>
+            </dl>
+            <p class="fine">Para voz e violão a necessidade é menor. Combine os detalhes pelo WhatsApp.</p>
+            <a class="ct-rider-img" id="rider-img" target="_blank" rel="noopener"></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec sec-paper ct-sec" id="sec-foto">
+        <div class="wrap">
+          <h2>Fotos em alta resolução</h2>
+          <p class="fine">Toque em “Baixar” para salvar o arquivo original. Crédito livre para divulgação dos shows.</p>
+          <div class="ct-photos" id="list-foto"></div>
+        </div>
+      </section>
+
+      <section class="sec sec-paper ct-sec" id="sec-logo">
+        <div class="wrap">
+          <h2>Logos</h2>
+          <div class="ct-logos" id="list-logo"></div>
+        </div>
+      </section>
+
+      <section class="sec sec-paper ct-sec" id="sec-outro">
+        <div class="wrap">
+          <h2>Outros arquivos</h2>
+          <div class="kit" id="list-outro"></div>
+        </div>
+      </section>
+
+      <section class="sec sec-contact">
+        <div class="wrap">
+          <h2>Vamos fechar a data<b>!</b></h2>
+          <p class="lead narrow">Dúvidas sobre o rider, formatos ou disponibilidade? Fale direto com a produção.</p>
+          <div class="btn-row"><a class="btn btn-amber" id="wa" href="#" target="_blank" rel="noopener">Chamar no WhatsApp</a></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <span class="brand">Mag<b>!</b>on<b>!</b></span>
+      <span>CNPJ 41.544.613/0001-77</span>
+    </div>
+  </footer>
+
+  <script src="/assets/contratante.js?v=1" defer></script>
+</body>
+</html>

@@ -62,16 +62,6 @@ const SITE = {
     ['telao-01b', 2, 3, 'Ilustração do Mag!on! em estilo de cartaz'],
   ],
 
-  press: [
-    ['magioni-palco-02', 'thumb/palco-02.jpg', 'Palco, horizontal'],
-    ['magioni-palco-01', 'thumb/palco-01.jpg', 'Palco e plateia'],
-    ['magioni-palco-03', 'thumb/palco-08.jpg', 'Palco, braços abertos'],
-    ['magioni-palco-04', 'thumb/palco-04.jpg', 'Palco, vertical'],
-    ['magioni-retrato', 'thumb/retrato.jpg', 'Retrato'],
-    ['magioni-estudio-01', 'thumb/estudio-01.jpg', 'Estúdio, sentado'],
-    ['magioni-estudio-02', 'thumb/estudio-02.jpg', 'Estúdio, em pé'],
-    ['magioni-roxo-01', 'thumb/roxo-01.jpg', 'Entrevista'],
-  ],
 };
 
 const NAMES = {
@@ -243,13 +233,6 @@ safe(() => {
     x0 = null;
   });
 });
-
-/* Fotos de imprensa */
-safe(() => { $('#press').innerHTML = SITE.press.map(([file, thumb, label]) => `
-  <a class="press-item" href="${m('press/' + file + '.jpg')}?download=${encodeURIComponent('Magioni-' + file.replace('magioni-', '') + '.jpg')}">
-    <img src="${m(thumb)}" alt="" loading="lazy" />
-    <span>${esc(label)}</span>
-  </a>`).join(''); });
 
 /* Menu no celular e barra do topo */
 safe(() => {

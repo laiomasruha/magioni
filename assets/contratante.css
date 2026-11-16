@@ -1,0 +1,76 @@
+/* Área do contratante — complementa artista.css */
+.hidden { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.ct .top { position: sticky; }
+.ct-exit { min-height: 40px; padding: 6px 16px; font-size: .9rem; }
+
+.ct-kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .8rem; font-weight: 700; color: var(--amber); margin: 0 0 12px; }
+.ct h1 { font-family: var(--display); font-weight: 400; text-transform: uppercase; line-height: .95; font-size: clamp(2.6rem, 9vw, 5.2rem); margin: 0 0 18px; }
+.ct h1 b, .ct .lead b { color: var(--amber); font-weight: inherit; }
+
+/* Entrada */
+.ct-gate {
+  min-height: calc(100vh - 70px);
+  min-height: calc(100svh - 70px);
+  display: flex; align-items: center;
+  background:
+    radial-gradient(70% 60% at 85% 10%, rgba(125, 85, 217, .28), transparent 70%),
+    radial-gradient(80% 60% at 0% 100%, rgba(245, 179, 59, .18), transparent 70%),
+    var(--night);
+  padding: 56px 0;
+}
+.ct-gate-in { max-width: 640px; }
+.ct-form { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+.ct-form input {
+  flex: 1 1 220px; min-height: 54px; padding: 0 18px;
+  border-radius: 999px; border: 2px solid rgba(243, 241, 234, .35);
+  background: rgba(8, 10, 23, .6); color: var(--paper);
+  font: 700 1.15rem/1 var(--body); letter-spacing: .14em; text-transform: uppercase;
+  outline: none;
+}
+.ct-form input::placeholder { letter-spacing: .02em; text-transform: none; font-weight: 500; color: var(--muted); }
+.ct-form input:focus { border-color: var(--amber); }
+.ct-form .btn { min-height: 54px; padding-inline: 30px; }
+.ct-msg { min-height: 1.5em; margin: 12px 0 0; color: #ff9b9b; font-weight: 500; }
+.ct-help { color: var(--muted); margin-top: 6px; }
+.ct-help a { color: var(--paper); }
+
+/* Material */
+.ct-head { background: var(--night); padding: clamp(48px, 8vw, 88px) 0 clamp(28px, 5vw, 48px); }
+.ct-sec { padding: clamp(36px, 6vw, 64px) 0; }
+.ct-sec + .ct-sec { padding-top: 0; }
+.ct-sec h2 { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0 0 18px; }
+.ct-sec .rider { margin-top: 0; }
+.ct-sec .rider h2 { margin: 0; }
+
+.ct-rider-img { display: block; margin-top: 22px; border-radius: 6px; overflow: hidden; background: var(--paper-2); }
+.ct-rider-img img { display: block; width: 100%; height: auto; }
+
+.ct-photos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 18px; }
+@media (min-width: 760px) { .ct-photos { grid-template-columns: repeat(4, 1fr); } }
+.ct-photo { display: flex; flex-direction: column; gap: 8px; }
+.ct-photo a.thumb { display: block; border-radius: 4px; overflow: hidden; background: var(--paper-2); }
+.ct-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 25%; transition: transform .3s; }
+.ct-photo a.thumb:hover img { transform: scale(1.03); }
+.ct-photo .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .9rem; font-weight: 500; }
+.ct-dl {
+  display: inline-flex; align-items: center; gap: 6px; flex: none;
+  padding: 7px 12px; border-radius: 999px; background: var(--ink); color: var(--paper);
+  font-size: .82rem; font-weight: 700; text-decoration: none;
+}
+.ct-dl:hover { background: #000; }
+
+.ct-logos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 760px) { .ct-logos { grid-template-columns: repeat(4, 1fr); } }
+.ct-logo { display: flex; flex-direction: column; gap: 8px; }
+.ct-logo .swatch {
+  display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; padding: 14px; border-radius: 4px;
+  background-color: #fff;
+  background-image: linear-gradient(45deg, #eee 25%, transparent 25%), linear-gradient(-45deg, #eee 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee 75%), linear-gradient(-45deg, transparent 75%, #eee 75%);
+  background-size: 16px 16px; background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+.ct-logo .swatch img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.ct-logo .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .9rem; }
+.ct-logo .row small { display: block; opacity: .65; }

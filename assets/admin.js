@@ -1,4 +1,5 @@
 import { sb, $, $$, esc, toast, timeAgo } from './lib.js';
+import { initContratantes } from './admin-contratantes.js';
 
 const views = ['login', 'denied', 'app'];
 function show(name) {
@@ -34,6 +35,7 @@ async function onSession(session) {
   }
   show('app');
   $('#me-email').textContent = session.user.email || '';
+  initContratantes(session.user.email);
   await Promise.all([loadSettings(), loadRequests(), loadComments(), loadRepertoire()]);
   startPolling();
 }

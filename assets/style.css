@@ -214,3 +214,13 @@ footer a { color: var(--muted); }
 .row { display: flex; gap: 10px; align-items: center; }
 .hidden { display: none !important; }
 .center-card { max-width: 400px; margin: 10vh auto; }
+
+/* Painel: contratantes */
+.sub-h { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: 22px; margin: 26px 0 10px; }
+.code-text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; font-size: 18px; }
+.kit-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+@media (max-width: 560px) { .kit-form-grid { grid-template-columns: 1fr; } }
+.kit-row { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 6px; align-items: center; padding: 4px 0; }
+.kit-row .input { padding: 8px 10px; font-size: 14px; }
+@media (max-width: 560px) { .kit-row { grid-template-columns: 1fr auto auto; } .kit-row [data-field="description"] { grid-column: 1 / 2; grid-row: 2; } }
+#view-contratantes select.input { appearance: auto; }
