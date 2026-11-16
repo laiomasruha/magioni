@@ -17,7 +17,6 @@ const SITE = {
   contact: {
     whatsapp: [
       { label: '(27) 99977-3842', number: '5527999773842' },
-      { label: '(27) 99225-3878', number: '5527992253878' },
     ],
     whatsappText: 'Olá! Vi o site do Mag!on! e quero um orçamento de show.',
     email: 'magyone027@gmail.com',
@@ -129,9 +128,6 @@ safe(() => {
       </a>`).join('') + `
       <a class="contact-card" href="mailto:${esc(c.email)}?subject=${encodeURIComponent('Contratação de show')}">
         <span class="cc-kind">E-mail</span><span class="cc-val small">${esc(c.email)}</span>
-      </a>
-      <a class="contact-card" href="${esc(SITE.links.instagram)}" target="_blank" rel="noopener">
-        <span class="cc-kind">Instagram</span><span class="cc-val small">@magionioficial</span>
       </a>`;
 });
 
