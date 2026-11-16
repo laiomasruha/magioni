@@ -462,3 +462,8 @@ dialog:not([open]) { display: none; }
 .noms-list strong { font-size: 1.08rem; }
 .noms-list em { font-style: normal; color: var(--muted); }
 .noms-list em b { color: var(--amber); font-weight: inherit; }
+
+/* Palcos por onde passou */
+#palcos .stages { margin-top: clamp(14px, 3vw, 28px); }
+#palcos .stage-list li { padding: 6px 0; border-top: 1px solid var(--line); }
+#palcos .stage-list li:last-child { border-bottom: 1px solid var(--line); }
