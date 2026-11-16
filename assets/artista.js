@@ -87,9 +87,12 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&l
 const ext = (href, label, cls = '') =>
   `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`;
 
+/* Cada parte roda isolada: se uma falhar, o resto da página continua funcionando. */
+const safe = (fn) => { try { fn(); } catch (err) { console.error(err); } };
+
 /* Imagens fixas do HTML */
-$$('[data-src]').forEach((el) => { el.src = m(el.dataset.src); });
-$$('[data-srcset]').forEach((el) => { el.srcset = m(el.dataset.srcset); });
+$$('img[data-src]').forEach((el) => { const u = m(el.dataset.src); if (el.getAttribute('src') !== u) el.src = u; });
+$$('[data-srcset]').forEach((el) => { const u = m(el.dataset.srcset); if (el.getAttribute('srcset') !== u) el.srcset = u; });
 
 /* Downloads (o parâmetro ?download força o navegador a salvar o arquivo) */
 $$('[data-file]').forEach((a) => {
@@ -116,7 +119,7 @@ $$('[data-more="youtube"]').forEach((p) => {
 });
 
 /* Contato */
-{
+safe(() => {
   const c = SITE.contact;
   const text = encodeURIComponent(c.whatsappText);
   $('#contact-grid').innerHTML =
@@ -130,10 +133,10 @@ $$('[data-more="youtube"]').forEach((p) => {
       <a class="contact-card" href="${esc(SITE.links.instagram)}" target="_blank" rel="noopener">
         <span class="cc-kind">Instagram</span><span class="cc-val small">@magionioficial</span>
       </a>`;
-}
+});
 
 /* Spotify: só carrega o player quando a seção chega perto da tela */
-{
+safe(() => {
   const box = $('#spotify-player');
   if (SITE.links.spotifyEmbed && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((es) => {
@@ -143,7 +146,7 @@ $$('[data-more="youtube"]').forEach((p) => {
     }, { rootMargin: '600px' });
     io.observe(box.closest('section'));
   } else box.remove();
-}
+});
 
 /* YouTube: miniatura primeiro, o player só entra quando a pessoa toca */
 function ytCard(v) {
@@ -156,7 +159,7 @@ function ytCard(v) {
       <figcaption><span class="kind">${esc(v.kind)}</span>${esc(v.title)}</figcaption>
     </figure>`;
 }
-{
+safe(() => {
   const [first, ...rest] = SITE.youtube;
   $('#yt-feature').innerHTML = first ? ytCard(first) : '';
   $('#yt-grid').innerHTML = rest.map(ytCard).join('');
@@ -171,23 +174,23 @@ function ytCard(v) {
     f.className = 'yt-frame';
     b.replaceWith(f);
   });
-}
+});
 
 /* Clipes próprios */
-$('#clips').innerHTML = SITE.clips.map((c) => `
+safe(() => { $('#clips').innerHTML = SITE.clips.map((c) => `
   <figure class="clip ${c.tall ? 'tall' : 'wide'}">
     <video controls playsinline preload="none" poster="${m('thumb/v-' + c.file + '.jpg')}">
       <source src="${m('video/' + c.file + '.mp4')}" type="video/mp4" />
     </video>
     <figcaption>${esc(c.title)}</figcaption>
-  </figure>`).join('');
+  </figure>`).join(''); });
 // um vídeo de cada vez
 document.addEventListener('play', (e) => {
   $$('video').forEach((v) => { if (v !== e.target) v.pause(); });
 }, true);
 
 /* Galeria + ampliação */
-{
+safe(() => {
   const g = SITE.gallery;
   $('#gallery').innerHTML = g.map(([n, w, h, alt], i) => `
     <button type="button" class="shot" data-i="${i}" aria-label="Ampliar foto: ${esc(alt)}">
@@ -209,6 +212,7 @@ document.addEventListener('play', (e) => {
   $('#gallery').addEventListener('click', (e) => {
     const b = e.target.closest('.shot');
     if (!b) return;
+    if (typeof lb.showModal !== 'function') { window.open(m('web/' + g[+b.dataset.i][0] + '.jpg'), '_blank'); return; }
     show(+b.dataset.i);
     lb.showModal();
   });
@@ -230,17 +234,17 @@ document.addEventListener('play', (e) => {
     if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1));
     x0 = null;
   });
-}
+});
 
 /* Fotos de imprensa */
-$('#press').innerHTML = SITE.press.map(([file, thumb, label]) => `
+safe(() => { $('#press').innerHTML = SITE.press.map(([file, thumb, label]) => `
   <a class="press-item" href="${m('press/' + file + '.jpg')}?download=${encodeURIComponent('Magioni-' + file.replace('magioni-', '') + '.jpg')}">
     <img src="${m(thumb)}" alt="" loading="lazy" />
     <span>${esc(label)}</span>
-  </a>`).join('');
+  </a>`).join(''); });
 
 /* Menu no celular e barra do topo */
-{
+safe(() => {
   const btn = $('#menu-btn'), nav = $('#nav'), top = $('#top');
   const set = (open) => {
     nav.classList.toggle('open', open);
@@ -253,4 +257,4 @@ $('#press').innerHTML = SITE.press.map(([file, thumb, label]) => `
   const onScroll = () => top.classList.toggle('solid', window.scrollY > 40);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-}
+});
