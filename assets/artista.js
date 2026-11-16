@@ -5,7 +5,7 @@ const SITE = {
   links: {
     instagram: 'https://www.instagram.com/magionioficial',
     spotify: 'https://open.spotify.com/artist/4qW3FRAjHG6a1R5Bwau73k',
-    spotifyEmbed: 'https://open.spotify.com/embed/artist/4qW3FRAjHG6a1R5Bwau73k',
+    spotifyEmbed: 'https://open.spotify.com/embed/album/3bnSshwu3W0hCG2Hg7lmpV',
     apple: 'https://music.apple.com/br/artist/magioni/1794790422',
     youtube: 'https://www.youtube.com/@magionioficial',
     youtubeMusic: 'https://www.youtube.com/channel/UChlfzCx1QFEykkUqtrwInwQ',
@@ -133,7 +133,7 @@ safe(() => {
     const io = new IntersectionObserver((es) => {
       if (!es.some((e) => e.isIntersecting)) return;
       io.disconnect();
-      box.innerHTML = `<iframe title="Mag!on! no Spotify" src="${esc(SITE.links.spotifyEmbed)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+      box.innerHTML = `<iframe title="EP Divã no Spotify" src="${esc(SITE.links.spotifyEmbed)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
     }, { rootMargin: '600px' });
     io.observe(box.closest('section'));
   } else box.remove();
