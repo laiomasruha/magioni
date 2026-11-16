@@ -34,23 +34,23 @@ def polyline(x, y, ang, length, step, wobble, width):
 
 # 1) Rede de rachaduras finas que se ramificam
 def crack(x, y, ang, length, depth=0):
-    pts = polyline(x, y, ang, length, step=rng.uniform(4, 9), wobble=0.35, width=rng.uniform(0.8, 1.6))
+    pts = polyline(x, y, ang, length, step=rng.uniform(4, 9), wobble=0.35, width=rng.uniform(0.6, 1.1))
     if depth < 3:
         for _ in range(rng.randint(1, 3)):
             px, py = rng.choice(pts)
             crack(px, py, ang + rng.choice([-1, 1]) * rng.uniform(0.5, 1.3), length * rng.uniform(0.3, 0.6), depth + 1)
 
 
-for _ in range(95):
+for _ in range(40):
     crack(rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0, 2 * math.pi), rng.uniform(60, 220))
 
 # 2) Riscos longos e quase retos (arranhões)
-for _ in range(80):
+for _ in range(30):
     polyline(rng.uniform(-100, W), rng.uniform(0, H), rng.uniform(-0.6, 0.6) + rng.choice([0, math.pi]),
              rng.uniform(150, 600), step=12, wobble=0.04, width=rng.uniform(0.5, 1.1))
 
 # 3) Respingos e pontinhos
-for _ in range(4200):
+for _ in range(1600):
     x, y = rng.uniform(0, W) * SS, rng.uniform(0, H) * SS
     r = rng.choice([0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.2, 1.6]) * SS
     d.ellipse([x - r, y - r, x + r, y + r], fill=255)
@@ -63,8 +63,8 @@ noise = ndimage.gaussian_filter(np.random.rand(H, W), 6)
 noise = (noise - noise.min()) / (noise.max() - noise.min())
 fine = ndimage.gaussian_filter(np.random.rand(H, W), 1.2)
 fine = (fine - fine.min()) / (fine.max() - fine.min())
-worn = ((noise > 0.70) & (fine > 0.52)).astype(np.float32)
-grain = (ndimage.gaussian_filter(np.random.rand(H, W), 0.6) > 0.66).astype(np.float32) * (noise > 0.6)
+worn = ((noise > 0.78) & (fine > 0.58)).astype(np.float32)
+grain = (ndimage.gaussian_filter(np.random.rand(H, W), 0.6) > 0.70).astype(np.float32) * (noise > 0.68)
 worn = np.clip(worn + grain, 0, 1)
 
 holes = np.clip(dmg + worn, 0, 1)
