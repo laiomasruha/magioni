@@ -496,3 +496,6 @@ dialog:not([open]) { display: none; }
   .facts ul { grid-template-columns: 1fr; }
   .facts li { justify-content: flex-start; padding: 12px 0; }
 }
+@media (max-width: 719px) {
+  .facts ul { grid-template-columns: auto; justify-content: center; }
+}
