@@ -435,5 +435,5 @@ dialog:not([open]) { display: none; }
 .btn-line:hover { background: var(--paper); color: var(--ink); }
 
 /* Botão no rodapé */
-.foot .foot-btn { margin-left: 0; min-height: 40px; padding: 6px 16px; font-size: .88rem; color: var(--paper); }
+.foot .foot-btn { margin-left: auto; min-height: 40px; padding: 6px 16px; font-size: .88rem; color: var(--paper); }
 .foot .foot-btn:hover { color: var(--ink); }
