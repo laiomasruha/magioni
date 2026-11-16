@@ -437,3 +437,28 @@ dialog:not([open]) { display: none; }
 /* Botão no rodapé */
 .foot .foot-btn { margin-left: auto; min-height: 40px; padding: 6px 16px; font-size: .88rem; color: var(--paper); }
 .foot .foot-btn:hover { color: var(--ink); }
+
+/* Formatos de show (3 colunas) */
+@media (min-width: 900px) { .formats.formats-3 { grid-template-columns: repeat(3, 1fr); } }
+.formats article { position: relative; }
+.fmt-n { display: block; font-family: var(--display); font-size: 1rem; letter-spacing: .08em; color: #8a7a52; margin-bottom: 14px; }
+.formats p { line-height: 1.5; }
+
+/* Prêmios e indicações */
+.awards { display: grid; gap: 22px; margin-top: 10px; align-items: start; }
+@media (min-width: 860px) { .awards { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; } }
+.award-win {
+  padding: clamp(24px, 4vw, 40px); border-radius: 6px;
+  background: radial-gradient(120% 90% at 100% 0%, rgba(245, 179, 59, .28), transparent 60%), var(--night);
+  border: 1px solid rgba(245, 179, 59, .5);
+}
+.award-tag { display: inline-block; padding: 5px 12px; border-radius: 999px; background: var(--amber); color: var(--amber-ink); font-weight: 700; font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; }
+.award-win h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1; margin: 18px 0 10px; }
+.award-win p { color: var(--muted); margin: 0; }
+.noms-h { text-transform: uppercase; letter-spacing: .14em; font-size: .8rem; font-weight: 700; color: var(--amber); margin: 0 0 6px; }
+.noms-list li { display: grid; grid-template-columns: 52px 1fr; column-gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
+.noms-list li:last-child { border-bottom: 1px solid var(--line); }
+.noms-list span { grid-row: span 2; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.noms-list strong { font-size: 1.08rem; }
+.noms-list em { font-style: normal; color: var(--muted); }
+.noms-list em b { color: var(--amber); font-weight: inherit; }
