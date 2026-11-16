@@ -13,7 +13,7 @@ function newCode(len = 8) {
   const bytes = crypto.getRandomValues(new Uint8Array(len));
   return [...bytes].map((b) => ALPHABET[b % ALPHABET.length]).join('');
 }
-const linkFor = (code) => `${location.origin}/contratante?codigo=${code}`;
+const linkFor = (code) => `${location.origin}/press-kit?codigo=${code}`;
 const fmtDate = (iso) => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
 
