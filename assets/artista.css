@@ -405,3 +405,14 @@ dialog:not([open]) { display: none; }
   .clip.wide video { width: 320px; height: 180px; }
   .about-photo img, .cover img, .press-item img, .stages img { height: auto; }
 }
+
+/* Ícones das redes */
+.social-ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 1px solid var(--line); background: rgba(243, 241, 234, .04);
+  color: var(--paper); transition: background .15s, color .15s, border-color .15s, transform .15s;
+}
+.social-ico svg { width: 22px; height: 22px; fill: currentColor; }
+.social-ico:hover, .social-ico:focus-visible { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); transform: translateY(-2px); }
+.socials, .about-links { gap: 10px; }
