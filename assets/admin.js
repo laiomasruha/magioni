@@ -4,6 +4,24 @@ import { initDashboard, loadDashboard } from './admin-dashboard.js';
 import { initSite } from './admin-site.js';
 
 const views = ['login', 'denied', 'app'];
+
+// Entrou pelo link do e-mail? (o token chega no endereço e o Supabase apaga logo depois)
+const AUTH_LINK = String(window.__authLink || '');
+const FROM_LINK = /type=(magiclink|signup|recovery|invite)/.test(AUTH_LINK);
+if (/error_code=/.test(AUTH_LINK)) {
+  setTimeout(() => toast(/expired/.test(AUTH_LINK)
+    ? 'Esse link expirou ou já foi usado. Peça um novo abaixo.'
+    : 'Não deu para entrar com esse link. Peça um novo abaixo.', 'err'), 300);
+  history.replaceState(null, '', location.pathname);
+}
+// Leva direto para criar a senha
+function askPassword() {
+  $('.admin-nav .tab[data-view="settings"]').click();
+  $('#pw-hint').classList.remove('hidden');
+  const f = $('#password-form');
+  f.scrollIntoView({ block: 'center' });
+  setTimeout(() => f.elements.password.focus(), 200);
+}
 function show(name) {
   views.forEach((v) => $(`#${v}-view`).classList.toggle('hidden', v !== name));
 }
@@ -37,6 +55,7 @@ async function onSession(session) {
   }
   show('app');
   $('#me-email').textContent = session.user.email || '';
+  if (FROM_LINK) askPassword();
   initContratantes(session.user.email);
   initDashboard();
   initSite();
@@ -527,10 +546,23 @@ $('#password-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const password = e.target.elements.password.value;
   if (password.length < 8) return toast('A senha precisa ter pelo menos 8 caracteres.', 'err');
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
   const { error } = await sb.auth.updateUser({ password });
-  if (error) return toast('Não foi possível definir a senha.', 'err');
+  btn.disabled = false;
+  if (error) {
+    console.error(error);
+    const msg = {
+      weak_password: 'Senha fraca. Use letras e números, com pelo menos 8 caracteres.',
+      same_password: 'Essa já é a sua senha atual.',
+      reauthentication_needed: 'Por segurança, entre de novo pelo link do e-mail e tente outra vez.',
+      session_not_found: 'Sua sessão expirou. Entre de novo pelo link do e-mail.',
+    }[error.code] || `Não foi possível definir a senha (${error.message}).`;
+    return toast(msg, 'err');
+  }
   e.target.reset();
-  toast('Senha definida. Da próxima vez, entre com e-mail e senha.');
+  $('#pw-hint').classList.add('hidden');
+  toast('Senha criada! Da próxima vez, entre com e-mail e senha.');
 });
 
 boot();

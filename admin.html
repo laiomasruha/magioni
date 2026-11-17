@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
+  <script>window.__authLink = location.hash + location.search;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Painel · Mag!on!</title>
   <meta name="robots" content="noindex" />
@@ -267,6 +268,7 @@
       </form>
       <form class="card" id="password-form" style="margin-top:14px">
         <p class="item-meta" style="margin:0 0 10px">Conectado como <strong id="me-email"></strong></p>
+        <p class="pw-hint hidden" id="pw-hint">Você entrou pelo link do e-mail. Crie sua senha aqui para entrar das próximas vezes com e-mail e senha.</p>
         <label class="field"><span>Nova senha (mín. 8 caracteres)</span><input class="input" type="password" name="password" minlength="8" autocomplete="new-password" required /></label>
         <button class="btn ghost" type="submit">Definir senha</button>
       </form>

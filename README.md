@@ -34,7 +34,7 @@ insert into public.magioni_admins (email) values ('email@exemplo.com');
 2. Framework Preset: **Other**. Sem comando de build, diretório de saída padrão (raiz).
 3. Deploy. Cada push na `main` publica de novo automaticamente.
 
-Depois do primeiro deploy, adicione a URL do site em Supabase → Authentication → URL Configuration → **Redirect URLs** (ex.: `https://magioni.vercel.app/admin`) para o login por link de e-mail voltar pro painel.
+Depois do primeiro deploy, adicione a URL do site em Supabase → Authentication → URL Configuration → **Redirect URLs** (ex.: `https://magionioficial.com.br/admin` e `https://www.magionioficial.com.br/admin`) para o login por link de e-mail voltar pro painel.
 
 ## Arquivos
 

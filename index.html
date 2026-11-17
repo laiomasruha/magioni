@@ -2,6 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
+  <script>
+    // Link de acesso do painel (e-mail) que caiu nesta página: manda para o painel com o token
+    (function () {
+      var h = location.hash, q = location.search;
+      if (/(^|[#&])(access_token|error_code)=/.test(h) || /[?&](code|token_hash)=/.test(q)) location.replace('/admin' + q + h);
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Mag!on! · Site oficial</title>
   <meta name="description" content="Mag!on!, cantor e compositor capixaba. Música, vídeos, fotos e material para contratantes." />
