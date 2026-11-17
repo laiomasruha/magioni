@@ -501,3 +501,21 @@ dialog:not([open]) { display: none; }
 }
 .foot-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
 .foot .foot-actions .foot-btn { margin-left: 0; }
+
+/* Menu do celular: trava a página por baixo e não deixa o efeito de vidro da barra
+   (backdrop-filter) prender o menu dentro dela */
+html.menu-open, html.menu-open body { overflow: hidden; }
+.top.menu-open { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; background: transparent; }
+@media (max-width: 899px) {
+  .nav {
+    height: 100vh; height: 100dvh;
+    overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    padding-top: calc(84px + env(safe-area-inset-top));
+    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  }
+  .nav a:first-child { margin-top: auto; }
+  .nav a:last-child { margin-bottom: auto; }
+  .nav a { font-size: clamp(2rem, 9.5vw, 3rem); padding: 2px 0; }
+  .top.menu-open .top-cta { display: none; }
+}

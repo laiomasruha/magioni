@@ -232,6 +232,8 @@ safe(() => {
   const btn = $('#menu-btn'), nav = $('#nav'), top = $('#top');
   const set = (open) => {
     nav.classList.toggle('open', open);
+    top.classList.toggle('menu-open', open);
+    document.documentElement.classList.toggle('menu-open', open);
     btn.setAttribute('aria-expanded', String(open));
     btn.textContent = open ? 'Fechar' : 'Menu';
   };
