@@ -543,3 +543,6 @@ html.menu-open .to-top { opacity: 0; pointer-events: none; }
   .foot-actions { margin-left: 0; justify-content: center; }
   .foot .foot-btn { margin-left: 0; }
 }
+@media (max-width: 719px) {
+  .foot { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+}
