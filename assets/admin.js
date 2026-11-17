@@ -502,7 +502,7 @@ $('#geo-form').addEventListener('submit', async (e) => {
   };
   const { error } = await sb.from('magioni_settings').update(patch).eq('id', 1);
   if (error) return toast('Erro ao salvar.', 'err');
-  toast(patch.geo_enabled ? 'Limite por distância ativado.' : 'Limite por distância desligado.');
+  toast(patch.geo_enabled ? 'Salvo. Limite por distância ativado.' : 'Salvo. Limite por distância desligado.');
   loadSettings();
 });
 

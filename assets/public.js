@@ -55,16 +55,26 @@ function gate(icon, title, text, btnLabel, onClick) {
   b.onclick = onClick || null;
 }
 
+// Mostra onde é o show (nome cadastrado no painel) enquanto os pedidos estão abertos
+function renderVenue() {
+  const st = state.settings || {};
+  const label = (st.geo_label || '').trim();
+  const on = !!(st.requests_open && label);
+  $('#venue').classList.toggle('hidden', !on);
+  $('#venue-name').textContent = on ? label : '';
+}
+
 function applyAccess() {
   const st = state.settings || {};
   const name = st.artist_name || 'Mag!on!';
+  renderVenue();
   if (!st.requests_open) {
     return gate('🌙', `${name} não está tocando agora`,
       'O cardápio musical abre durante os shows. Quando ele estiver no palco, é só voltar aqui e escolher a sua música.');
   }
   if (!geoOn(st)) return showMenu(true);
 
-  const place = st.geo_label ? ` (${st.geo_label})` : '';
+  const place = st.geo_label ? ` (${st.geo_label.trim()})` : '';
   if (state.pos) {
     const d = distanceM(st.geo_lat, st.geo_lng, state.pos.lat, state.pos.lng);
     if (d <= st.geo_radius_m) return showMenu(true);
@@ -83,7 +93,7 @@ function applyAccess() {
       'Confira se a localização do celular está ligada e tente de novo.', 'Tentar de novo', locate);
   }
   return gate('🎸', 'Você está no show?',
-    `Para pedir músicas, confirme que você está no local${place}. A localização é usada só para isso e não fica guardada.`,
+    `Para pedir músicas, confirme que você está ${st.geo_label ? 'lá' : 'no local'}. A localização é usada só para isso e não fica guardada.`,
     'Estou no show, abrir o cardápio', locate);
 }
 
@@ -114,7 +124,8 @@ async function refreshSettings() {
   state.settings = data;
   if (geoOn(data) && !state.pos && state.geo === 'idle' && data.requests_open) autoLocate();
   if (was.requests_open !== data.requests_open || was.geo_enabled !== data.geo_enabled
-      || was.geo_lat !== data.geo_lat || was.geo_lng !== data.geo_lng || was.geo_radius_m !== data.geo_radius_m) {
+      || was.geo_lat !== data.geo_lat || was.geo_lng !== data.geo_lng || was.geo_radius_m !== data.geo_radius_m
+      || was.geo_label !== data.geo_label) {
     renderList();
     applyAccess();
   }
