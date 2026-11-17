@@ -536,3 +536,10 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 .to-top:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; }
 .to-top svg { width: 24px; height: 24px; }
 html.menu-open .to-top { opacity: 0; pointer-events: none; }
+
+/* Rodapé centralizado no celular */
+@media (max-width: 719px) {
+  .foot-in { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+  .foot-actions { margin-left: 0; justify-content: center; }
+  .foot .foot-btn { margin-left: 0; }
+}
