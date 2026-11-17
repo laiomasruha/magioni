@@ -39,8 +39,7 @@ const fmtDist = (m) => (m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000
 const geoOn = (st) => st.geo_enabled && st.geo_lat != null && st.geo_lng != null;
 
 function showMenu(on) {
-  $('#pedido').classList.toggle('hidden', !on);
-  $('#recado').classList.toggle('hidden', !on);
+  $('#menu').classList.toggle('hidden', !on);
   $('#gate').classList.toggle('hidden', on);
   if (!on && $('#req-dialog').open) $('#req-dialog').close();
 }
@@ -259,6 +258,43 @@ $('#req-form').addEventListener('submit', async (e) => {
   e.target.elements.note.value = '';
   $('#req-dialog').close();
   toast(`Pedido enviado: ${song.title} 🎶`);
+});
+
+/* ───── Abas do cardápio ───── */
+function openTab(id) {
+  $$('.mtab').forEach((b) => b.setAttribute('aria-selected', String(b.getAttribute('aria-controls') === id)));
+  $$('.mpanel').forEach((p) => p.classList.toggle('hidden', p.id !== id));
+}
+$$('.mtab').forEach((b) => b.addEventListener('click', () => openTab(b.getAttribute('aria-controls'))));
+
+/* ───── Sugestão de música ───── */
+$('#suggest-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (onCooldown('mg_last_sug')) {
+    toast('Espere uns segundinhos antes de mandar outra sugestão.', 'err');
+    return;
+  }
+  const f = e.target.elements;
+  const artist = f.artist.value.trim();
+  const title = f.title.value.trim();
+  if (!artist || !title) return;
+  const name = f.name.value.trim();
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+  const { error } = await sb.from('magioni_suggestions').insert({
+    artist, title, requester_name: name || null,
+    req_lat: state.pos?.lat ?? null, req_lng: state.pos?.lng ?? null,
+  });
+  btn.disabled = false;
+  if (error) {
+    toast('Não deu pra enviar a sugestão agora. Tente de novo.', 'err');
+    refreshSettings();
+    return;
+  }
+  markSent('mg_last_sug');
+  try { if (name) localStorage.setItem('mg_name', name); } catch { /* ignore */ }
+  f.artist.value = ''; f.title.value = '';
+  toast(`Sugestão enviada: ${title} 💡`);
 });
 
 $('#comment-form').addEventListener('submit', async (e) => {

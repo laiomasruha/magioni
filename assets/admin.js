@@ -1,5 +1,6 @@
 import { sb, $, $$, esc, toast, timeAgo } from './lib.js';
 import { initContratantes } from './admin-contratantes.js';
+import { initDashboard, loadDashboard } from './admin-dashboard.js';
 
 const views = ['login', 'denied', 'app'];
 function show(name) {
@@ -36,6 +37,7 @@ async function onSession(session) {
   show('app');
   $('#me-email').textContent = session.user.email || '';
   initContratantes(session.user.email);
+  initDashboard();
   await Promise.all([loadSettings(), loadRequests(), loadComments(), loadRepertoire()]);
   startPolling();
 }
@@ -91,6 +93,7 @@ function startPolling() {
     if (document.hidden) return;
     loadRequests();
     loadComments();
+    if (!$('#view-dashboard').classList.contains('hidden')) loadDashboard();
   }, 15000);
 }
 function stopPolling() {
@@ -529,3 +532,5 @@ $('#password-form').addEventListener('submit', async (e) => {
 });
 
 boot();
+
+document.addEventListener('magioni:repertoire-changed', () => loadRepertoire());

@@ -46,6 +46,7 @@
     </div>
     <nav class="admin-nav" role="tablist">
       <button class="tab" data-view="requests" aria-pressed="true">Pedidos<span class="badge hidden" id="badge-req"></span></button>
+      <button class="tab" data-view="dashboard" aria-pressed="false">Dashboard<span class="badge hidden" id="badge-sug"></span></button>
       <button class="tab" data-view="repertoire" aria-pressed="false">Repertório</button>
       <button class="tab" data-view="comments" aria-pressed="false">Recados<span class="badge hidden" id="badge-com"></span></button>
       <button class="tab hidden" data-view="contratantes" aria-pressed="false" id="tab-contratantes">Contratantes</button>
@@ -96,6 +97,43 @@
       <div class="toolbar" style="margin-top:16px">
         <button class="btn danger small" id="clear-done">Apagar tocadas e recusadas</button>
       </div>
+    </section>
+
+    <section id="view-dashboard" class="view hidden">
+      <div class="toolbar" id="dash-period">
+        <button class="tab" data-days="7" aria-pressed="false">7 dias</button>
+        <button class="tab" data-days="30" aria-pressed="true">30 dias</button>
+        <button class="tab" data-days="0" aria-pressed="false">Tudo</button>
+      </div>
+      <div class="kpis" id="dash-kpis"></div>
+
+      <div class="card dash-card">
+        <h3 class="dash-h">Pedidos por dia</h3>
+        <div id="dash-days"></div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card dash-card">
+          <h3 class="dash-h">Músicas mais pedidas</h3>
+          <div id="dash-top"></div>
+        </div>
+        <div class="card dash-card">
+          <h3 class="dash-h">Estilos mais pedidos</h3>
+          <div id="dash-cats"></div>
+        </div>
+      </div>
+
+      <div class="card dash-card">
+        <h3 class="dash-h">Sugestões do público <span class="badge hidden" id="badge-sug2"></span></h3>
+        <p class="item-meta" style="margin:0 0 10px">Músicas que o público sugeriu e ainda não estão no repertório. Escolha o estilo e cadastre: a sugestão sai da lista e a música entra no cardápio.</p>
+        <div class="list" id="dash-sug"></div>
+      </div>
+
+      <details class="card dash-card">
+        <summary class="dash-h" style="cursor:pointer">Nunca pedidas <span class="item-meta" id="dash-never-n"></span></summary>
+        <p class="item-meta" style="margin:8px 0 10px">Músicas ativas do repertório sem nenhum pedido no período escolhido.</p>
+        <div id="dash-never"></div>
+      </details>
     </section>
 
     <section id="view-repertoire" class="view hidden">

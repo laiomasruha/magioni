@@ -137,3 +137,6 @@ create trigger magioni_only_listed_users
 -- magioni_settings.geo_enabled/geo_lat/geo_lng/geo_radius_m/geo_label,
 -- magioni_requests/comments.req_lat/req_lng, funções magioni_distance_m e
 -- magioni_menu_allows(lat, lng), usadas nas políticas de inserção.
+
+-- Sugestões do público (migração magioni_suggestions): artista, música, nome opcional,
+-- status nova/adicionada/descartada; inserção só com o cardápio liberado (magioni_menu_allows).
