@@ -89,8 +89,13 @@ $('#magic-btn').addEventListener('click', async () => {
     email,
     options: { shouldCreateUser: true, emailRedirectTo: `${location.origin}/admin` },
   });
-  if (error) toast('Este e-mail não tem acesso ao painel.', 'err');
-  else toast('Link enviado! Confira sua caixa de entrada.');
+  if (error) {
+    console.error(error);
+    const limit = error.status === 429 || /rate limit/i.test(error.message || '');
+    toast(limit
+      ? 'Muitos links pedidos em pouco tempo. Use o último que chegou no e-mail ou tente de novo em 1 hora.'
+      : 'Este e-mail não tem acesso ao painel.', 'err');
+  } else toast('Link enviado! Confira sua caixa de entrada (e o spam).');
 });
 
 const logout = async () => {
