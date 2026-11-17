@@ -252,7 +252,10 @@ safe(async () => {
     const bar = $('#live-bar');
     if (open && bar) {
       const venue = $('#live-venue'), label = (row.geo_label || '').trim();
-      if (venue && label) venue.textContent = `${label} · `;
+      // 1ª linha: o lugar do show; 2ª linha: o convite para pedir música
+      if (venue) venue.textContent = label || 'Show acontecendo agora';
+      const wide = $('#live-wide');
+      if (wide) wide.hidden = !label;
       // A faixa fica fixa acima do cabeçalho: guarda a altura dela para empurrar o cabeçalho para baixo
       const root = document.documentElement;
       const fit = () => root.style.setProperty('--bar-h', `${bar.offsetHeight}px`);

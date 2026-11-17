@@ -567,11 +567,13 @@ html.menu-open .to-top { opacity: 0; pointer-events: none; }
   font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
 }
 .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff4d4d; }
-.live-text strong { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.live-text { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+.live-place { font-size: 1.02rem; line-height: 1.2; overflow-wrap: anywhere; }
+.live-text strong { font-weight: 700; font-size: .88rem; text-decoration: underline; text-underline-offset: 3px; }
 .live-wide { display: none; }
 .live-venue { font-weight: 700; }
 .live-arrow { flex: none; font-weight: 700; font-size: 1.15rem; }
-@media (min-width: 720px) { .live-wide { display: inline; } }
+@media (min-width: 720px) { .live-wide:not([hidden]) { display: inline; } }
 @media (prefers-reduced-motion: no-preference) {
   .live-dot { animation: live-blink 1.2s ease-in-out infinite; }
   .live-arrow { animation: live-nudge 1.4s ease-in-out infinite; }
