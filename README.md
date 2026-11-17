@@ -14,6 +14,7 @@ Site estático (HTML + CSS + JS, sem build) hospedado na Vercel. Os dados ficam 
 | `magioni_settings`, `magioni_categories`, `magioni_songs` | lê (só músicas ativas) | lê e edita |
 | `magioni_requests` | só envia (com pedidos abertos e música ativa) | lê, muda status, apaga |
 | `magioni_comments` | só envia | lê, marca como lido, apaga |
+| `magioni_site` (contato, redes, fotos e vídeos do site oficial) | lê | edita (aba **Site** do painel) |
 
 Só existem contas para os e-mails da tabela `magioni_admins` (hoje: laiomasruha@gmail.com e cantormagioni@gmail.com). Um gatilho no banco recusa a criação de conta para qualquer outro e-mail, e o painel não tem tela de cadastro.
 
@@ -43,8 +44,11 @@ assets/config.js    URL e chave pública do Supabase
 assets/lib.js       cliente Supabase e utilitários
 assets/public.js    lógica da página pública
 assets/admin.js     lógica do painel
+assets/admin-site.js painel → aba Site (contato, redes, fotos, vídeos, galeria)
+assets/artista.js   site oficial (lê o conteúdo da tabela magioni_site)
 assets/style.css    estilos
 supabase/schema.sql tabelas e políticas
 supabase/seed.sql   repertório inicial (cardápio impresso)
+supabase/site.sql   tabela magioni_site com o conteúdo inicial do site
 vercel.json         rotas limpas (/admin) e cabeçalhos
 ```

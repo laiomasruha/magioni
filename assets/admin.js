@@ -1,6 +1,7 @@
 import { sb, $, $$, esc, toast, timeAgo } from './lib.js';
 import { initContratantes } from './admin-contratantes.js';
 import { initDashboard, loadDashboard } from './admin-dashboard.js';
+import { initSite } from './admin-site.js';
 
 const views = ['login', 'denied', 'app'];
 function show(name) {
@@ -38,6 +39,7 @@ async function onSession(session) {
   $('#me-email').textContent = session.user.email || '';
   initContratantes(session.user.email);
   initDashboard();
+  initSite();
   await Promise.all([loadSettings(), loadRequests(), loadComments(), loadRepertoire()]);
   startPolling();
 }

@@ -50,6 +50,7 @@
       <button class="tab" data-view="repertoire" aria-pressed="false">Repertório</button>
       <button class="tab" data-view="comments" aria-pressed="false">Recados<span class="badge hidden" id="badge-com"></span></button>
       <button class="tab hidden" data-view="contratantes" aria-pressed="false" id="tab-contratantes">Contratantes</button>
+      <button class="tab" data-view="site" aria-pressed="false">Site</button>
       <button class="tab" data-view="settings" aria-pressed="false">Configurações</button>
     </nav>
 
@@ -191,6 +192,67 @@
         <p class="item-meta" style="margin:10px 0 0">Até 50 MB por arquivo. Os arquivos ficam privados: só abre quem tem código.</p>
       </form>
       <div id="kit-list"></div>
+    </section>
+
+    <section id="view-site" class="view hidden">
+      <p class="item-meta" style="margin-top:0">Tudo o que aparece no site oficial: contato, redes, fotos e vídeos. Mude o que quiser e toque em <strong>Salvar alterações</strong>. Fotos e vídeos novos já sobem na hora, mas só entram no site depois de salvar.</p>
+
+      <h3 class="sub-h">Contato</h3>
+      <div class="card">
+        <div class="field"><span>WhatsApp</span>
+          <div class="site-rows" id="site-wa"></div>
+          <button class="btn ghost small" type="button" id="site-wa-add">+ Adicionar número</button>
+        </div>
+        <label class="field"><span>Mensagem que já vem escrita no WhatsApp</span><textarea class="input" rows="2" maxlength="500" data-k="contact.whatsappText"></textarea></label>
+        <label class="field"><span>E-mail</span><input class="input" type="email" maxlength="160" data-k="contact.email" placeholder="contato@exemplo.com" /></label>
+        <label class="field" style="margin-bottom:0"><span>Assunto do e-mail</span><input class="input" maxlength="140" data-k="contact.emailSubject" placeholder="Contratação de show" /></label>
+      </div>
+
+      <h3 class="sub-h">Redes e plataformas</h3>
+      <div class="card">
+        <p class="item-meta" style="margin:0 0 12px">Cole o link completo. Deixe em branco para o ícone sumir do site.</p>
+        <label class="field"><span>Instagram</span><input class="input" type="url" data-k="links.instagram" placeholder="https://www.instagram.com/…" /></label>
+        <label class="field"><span>Spotify (perfil do artista)</span><input class="input" type="url" data-k="links.spotify" placeholder="https://open.spotify.com/artist/…" /></label>
+        <label class="field"><span>Player do Spotify na seção Música (link do álbum, EP, música ou playlist)</span><input class="input" type="url" data-k="links.spotifyEmbed" placeholder="https://open.spotify.com/album/…" /></label>
+        <label class="field"><span>Apple Music</span><input class="input" type="url" data-k="links.apple" placeholder="https://music.apple.com/…" /></label>
+        <label class="field"><span>YouTube (canal)</span><input class="input" type="url" data-k="links.youtube" placeholder="https://www.youtube.com/@…" /></label>
+        <label class="field"><span>YouTube Music</span><input class="input" type="url" data-k="links.youtubeMusic" placeholder="https://music.youtube.com/…" /></label>
+        <label class="field"><span>TikTok</span><input class="input" type="url" data-k="links.tiktok" placeholder="https://www.tiktok.com/@…" /></label>
+        <label class="field" style="margin-bottom:0"><span>Facebook</span><input class="input" type="url" data-k="links.facebook" placeholder="https://www.facebook.com/…" /></label>
+      </div>
+
+      <h3 class="sub-h">Fotos fixas</h3>
+      <div class="site-fixed" id="site-images"></div>
+
+      <h3 class="sub-h">Vídeos do YouTube</h3>
+      <div class="card">
+        <p class="item-meta" style="margin:0 0 12px">O primeiro da lista aparece em destaque. Use as setas para mudar a ordem.</p>
+        <div class="site-rows" id="site-yt"></div>
+        <form class="site-add" id="site-yt-add">
+          <input class="input" name="url" placeholder="Cole o link do vídeo do YouTube" required />
+          <button class="btn small" type="submit">Adicionar</button>
+        </form>
+      </div>
+
+      <h3 class="sub-h">Vídeos do site</h3>
+      <div class="card">
+        <p class="item-meta" style="margin:0 0 12px">Vídeos curtos que tocam direto no site (MP4, até 50 MB). A capa é tirada do próprio vídeo, e dá para trocar depois.</p>
+        <div class="site-rows" id="site-clips"></div>
+        <label class="btn ghost small site-file">+ Enviar vídeo<input type="file" accept="video/mp4,video/quicktime,video/*" id="site-clip-file" hidden /></label>
+      </div>
+
+      <h3 class="sub-h">Galeria de fotos</h3>
+      <div class="card">
+        <p class="item-meta" style="margin:0 0 12px">Dá para enviar várias de uma vez. A descrição ajuda quem usa leitor de tela e aparece na foto ampliada.</p>
+        <div class="site-gallery" id="site-gallery"></div>
+        <label class="btn ghost small site-file">+ Enviar fotos<input type="file" accept="image/*" multiple id="site-gal-file" hidden /></label>
+      </div>
+
+      <div class="site-save" id="site-save-bar">
+        <span class="item-meta" id="site-dirty">Tudo salvo</span>
+        <a class="btn ghost small" href="/proposta-m7q4x9" target="_blank" rel="noopener">Ver site</a>
+        <button class="btn" type="button" id="site-save" disabled>Salvar alterações</button>
+      </div>
     </section>
 
     <section id="view-settings" class="view hidden">

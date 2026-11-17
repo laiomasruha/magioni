@@ -1,7 +1,7 @@
 /* Área do contratante: entra com o código e mostra o material liberado. */
 (() => {
   const FN = 'https://phjfzcfmjnwufjmmjnke.supabase.co/functions/v1/contratante';
-  const WHATSAPP = '5527999773842';
+  let WHATSAPP = '5527999773842'; // trocado pelo número do painel (Site → Contato) assim que carrega
   const KEY = 'mg_contratante_code';
 
   const $ = (s) => document.querySelector(s);
@@ -12,8 +12,19 @@
     set: (v) => { try { v ? sessionStorage.setItem(KEY, v) : sessionStorage.removeItem(KEY); } catch { /* ignore */ } },
   };
 
-  $('#ask').href = wa('Olá! Sou contratante e gostaria do código de acesso ao material do Mag!on!.');
-  $('#wa').href = wa('Olá! Vi o material do Mag!on! e quero conversar sobre uma data de show.');
+  const setWa = () => {
+    $('#ask').href = wa('Olá! Sou contratante e gostaria do código de acesso ao material do Mag!on!.');
+    $('#wa').href = wa('Olá! Vi o material do Mag!on! e quero conversar sobre uma data de show.');
+  };
+  setWa();
+  const KEY_ = 'sb_publishable_Diqn3xciul137uTioeaLMQ_WuM9jJxE';
+  fetch(FN.replace('/functions/v1/contratante', '/rest/v1/magioni_site?id=eq.1&select=content'), { headers: { apikey: KEY_, Authorization: `Bearer ${KEY_}` } })
+    .then((r) => r.json())
+    .then(([row]) => {
+      const n = String(row?.content?.contact?.whatsapp?.[0]?.number || '').replace(/\D/g, '');
+      if (n) { WHATSAPP = n; setWa(); }
+    })
+    .catch(() => { /* mantém o número padrão */ });
 
   const kindLabel = (name) => {
     const ext = (name.split('.').pop() || '').toUpperCase();

@@ -1,68 +1,8 @@
-/* Página do artista (proposta). Tudo o que muda com frequência fica neste objeto. */
-const SITE = {
-  media: 'https://phjfzcfmjnwufjmmjnke.supabase.co/storage/v1/object/public/magioni-media/import/',
-
-  links: {
-    instagram: 'https://www.instagram.com/magionioficial',
-    spotify: 'https://open.spotify.com/artist/4qW3FRAjHG6a1R5Bwau73k',
-    spotifyEmbed: 'https://open.spotify.com/embed/album/3bnSshwu3W0hCG2Hg7lmpV',
-    apple: 'https://music.apple.com/br/artist/magioni/1794790422',
-    youtube: 'https://www.youtube.com/@magionioficial',
-    youtubeMusic: 'https://www.youtube.com/channel/UChlfzCx1QFEykkUqtrwInwQ',
-    tiktok: 'https://www.tiktok.com/@magionioficial',
-    facebook: 'https://www.facebook.com/share/152CtP9spcY/',
-    google: 'https://share.google/WpS2Hxrd9bsBmscdF',
-  },
-
-  contact: {
-    whatsapp: [
-      { label: '(27) 99977-3842', number: '5527999773842' },
-    ],
-    whatsappText: 'Olá! Vi o site do Mag!on! e quero um orçamento de show.',
-    email: 'magyone027@gmail.com',
-  },
-
-  // IDs conferidos no canal youtube.com/@magionioficial
-  youtube: [
-    { id: '0P9En1rUbSc', title: 'Fantoche', kind: 'Videoclipe' },
-    { id: 'MWW-WlKFw1M', title: 'Sacanagem', kind: 'Videoclipe' },
-    { id: 'A8bYfU8i2Gw', title: 'Pé de Limão, com JVsaxx', kind: 'Videoclipe' },
-    { id: 'IN-UhQ72rEM', title: 'Fantoche, com a Orquestra Camerata', kind: 'Ao vivo' },
-    { id: 'KyaatnMKWC0', title: 'Pé de Limão, com JVsaxx', kind: 'Ao vivo' },
-    { id: 'WG0QG41Kd6M', title: 'Fantoche, ensaio no 4Studio', kind: 'Ensaio' },
-    { id: 'blnPCGnmdkw', title: 'Smells Like Teen Spirit', kind: 'Cover' },
-    { id: 'bsII3sMrSr4', title: 'Entrevista com Mag!on!', kind: 'Entrevista' },
-    { id: 'Jcj-JsIKT8Y', title: 'Mag!on! e Amaro Lima', kind: 'Entrevista' },
-  ],
-
-  // Vídeos curtos hospedados no próprio site
-  clips: [
-    { file: 'show-centro-vitoria', title: 'Show no Centro de Vitória', tall: true },
-    { file: 'show-rita-lee', title: 'Rita Lee no Centro de Vitória', tall: true },
-    { file: 'apresentacao-prefeitura', title: 'Apresentação ao ar livre', tall: true },
-    { file: 'pedra-azul-drone', title: 'Pedra Azul Beer Festival, visto do drone', tall: false },
-  ],
-
-  gallery: [
-    ['palco-03', 2, 3, 'Mag!on! ao violão sob luz azul-esverdeada'],
-    ['palco-01', 3, 2, 'Mag!on! com o braço erguido diante da plateia'],
-    ['retrato', 1, 1, 'Retrato em close do Mag!on!'],
-    ['estudio-01', 2, 3, 'Mag!on! sentado com o violão, em estúdio'],
-    ['palco-08', 3, 2, 'Mag!on! de braços abertos no palco'],
-    ['palco-05', 2, 3, 'Mag!on! cantando ao microfone com o violão'],
-    ['roxo-01', 4, 5, 'Mag!on! em cenário roxo, durante entrevista'],
-    ['palco-pb-b', 1408, 1872, 'Mag!on! no palco, em preto e branco'],
-    ['palco-festival', 1489, 993, 'Banda completa em palco de festival'],
-    ['palco-06', 2, 3, 'Mag!on! tocando violão sob luzes quentes'],
-    ['estudio-03', 2, 3, 'Mag!on! tocando violão em estúdio'],
-    ['roxo-03', 2, 3, 'Mag!on! de camiseta branca em fundo roxo'],
-    ['publico-01', 3, 2, 'Plateia dançando durante o show'],
-    ['palco-09', 2, 3, 'Mag!on! em palco com iluminação azul'],
-    ['palco-04', 2, 3, 'Mag!on! sorrindo ao violão no palco'],
-    ['telao-01b', 2, 3, 'Ilustração do Mag!on! em estilo de cartaz'],
-  ],
-
-};
+/* Página do artista. Links, contato, fotos e vídeos vêm do painel (tabela magioni_site). */
+const SB_URL = 'https://phjfzcfmjnwufjmmjnke.supabase.co';
+const SB_KEY = 'sb_publishable_Diqn3xciul137uTioeaLMQ_WuM9jJxE';
+const rest = (q) => fetch(`${SB_URL}/rest/v1/${q}`, { headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` } })
+  .then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
 
 const NAMES = {
   instagram: 'Instagram', spotify: 'Spotify', apple: 'Apple Music', youtube: 'YouTube',
@@ -82,128 +22,181 @@ const ICONS = {
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const m = (p) => SITE.media + p;
-const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ext = (href, label, cls = '') =>
   `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+const digits = (s) => String(s || '').replace(/\D/g, '');
+const phone = (n) => {
+  const d = digits(n).replace(/^55(?=\d{10,11}$)/, '');
+  return d.length === 11 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : n;
+};
 
 /* Cada parte roda isolada: se uma falhar, o resto da página continua funcionando. */
 const safe = (fn) => { try { fn(); } catch (err) { console.error(err); } };
 
-/* Imagens fixas do HTML */
-$$('img[data-src]').forEach((el) => { const u = m(el.dataset.src); if (el.getAttribute('src') !== u) el.src = u; });
-$$('[data-srcset]').forEach((el) => { const u = m(el.dataset.srcset); if (el.getAttribute('srcset') !== u) el.srcset = u; });
+/* Esconde uma seção inteira (e o item do menu) quando ela fica vazia */
+const toggleSection = (id, on) => {
+  const sec = document.getElementById(id);
+  if (sec) sec.hidden = !on;
+  $$(`.nav a[href="#${id}"]`).forEach((a) => { a.hidden = !on; });
+};
 
-/* Downloads (o parâmetro ?download força o navegador a salvar o arquivo) */
-$$('[data-file]').forEach((a) => {
-  a.href = m(a.dataset.file) + '?download=' + encodeURIComponent(a.dataset.name || '');
-});
+function render(C) {
+  const links = C.links || {};
+  const contact = C.contact || {};
+  const images = C.images || {};
 
-/* Redes */
-$$('[data-socials]').forEach((box) => {
-  box.innerHTML = box.dataset.socials.split(',')
-    .filter((k) => SITE.links[k])
-    .map((k) => ICONS[k]
-      ? `<a class="social-ico" href="${esc(SITE.links[k])}" target="_blank" rel="noopener" aria-label="${esc(NAMES[k])}" title="${esc(NAMES[k])}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${ICONS[k]}"/></svg></a>`
-      : ext(SITE.links[k], NAMES[k], 'chip'))
-    .join('');
-});
-$$('[data-more="youtube"]').forEach((p) => {
-  if (SITE.links.youtube) p.innerHTML = ext(SITE.links.youtube, 'Ver todos os vídeos no YouTube', 'btn btn-ghost');
-});
+  /* Fotos fixas (abertura, retrato, capa, palco) */
+  safe(() => {
+    $$('[data-img]').forEach((img) => {
+      const v = images[img.dataset.img];
+      if (!v || !v.url) return;
+      if (img.getAttribute('src') !== v.url) img.src = v.url;
+      if (v.alt) img.alt = v.alt;
+      const pic = img.closest('picture');
+      const src = pic && pic.querySelector('source');
+      if (src) { if (v.mobile) src.srcset = v.mobile; else src.remove(); }
+    });
+  });
 
-/* Contato */
-safe(() => {
-  const c = SITE.contact;
-  const text = encodeURIComponent(c.whatsappText);
-  $('#contact-grid').innerHTML =
-    c.whatsapp.map((w) => `
-      <a class="contact-card wa" href="https://wa.me/${w.number}?text=${text}" target="_blank" rel="noopener">
-        <span class="cc-kind">WhatsApp</span><span class="cc-val">${esc(w.label)}</span>
-      </a>`).join('') + `
-      <a class="contact-card" href="mailto:${esc(c.email)}?subject=${encodeURIComponent('Contratação de show')}">
-        <span class="cc-kind">E-mail</span><span class="cc-val small">${esc(c.email)}</span>
-      </a>`;
-});
+  /* Redes */
+  safe(() => {
+    $$('[data-socials]').forEach((box) => {
+      box.innerHTML = box.dataset.socials.split(',')
+        .filter((k) => links[k])
+        .map((k) => ICONS[k]
+          ? `<a class="social-ico" href="${esc(links[k])}" target="_blank" rel="noopener" aria-label="${esc(NAMES[k])}" title="${esc(NAMES[k])}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${ICONS[k]}"/></svg></a>`
+          : ext(links[k], NAMES[k], 'chip'))
+        .join('');
+    });
+    $$('[data-more="youtube"]').forEach((p) => {
+      p.innerHTML = links.youtube ? ext(links.youtube, 'Ver todos os vídeos no YouTube', 'btn btn-ghost') : '';
+    });
+  });
 
-/* Spotify: só carrega o player quando a seção chega perto da tela */
-safe(() => {
-  const box = $('#spotify-player');
-  if (SITE.links.spotifyEmbed && 'IntersectionObserver' in window) {
+  /* Contato */
+  safe(() => {
+    const text = contact.whatsappText ? `?text=${encodeURIComponent(contact.whatsappText)}` : '';
+    const subject = contact.emailSubject ? `?subject=${encodeURIComponent(contact.emailSubject)}` : '';
+    const was = (contact.whatsapp || []).filter((w) => digits(w.number));
+    const emails = String(contact.email || '').split(/[\s,;]+/).filter(Boolean);
+    $('#contact-grid').innerHTML =
+      was.map((w) => `
+        <a class="contact-card wa" href="https://wa.me/${digits(w.number)}${text}" target="_blank" rel="noopener">
+          <span class="cc-kind">WhatsApp</span><span class="cc-val">${esc(w.label || phone(w.number))}</span>
+        </a>`).join('') +
+      emails.map((e) => `
+        <a class="contact-card" href="mailto:${esc(e)}${subject}">
+          <span class="cc-kind">E-mail</span><span class="cc-val small">${esc(e)}</span>
+        </a>`).join('');
+    const wa1 = was[0];
+    $$('[data-wa]').forEach((a) => { if (wa1) a.href = `https://wa.me/${digits(wa1.number)}${text}`; });
+  });
+
+  /* Spotify: só carrega o player quando a seção chega perto da tela */
+  safe(() => {
+    const box = $('#spotify-player');
+    if (!box) return;
+    const embed = spotifyEmbed(links.spotifyEmbed);
+    if (!embed || !('IntersectionObserver' in window)) { box.hidden = true; return; }
     const io = new IntersectionObserver((es) => {
       if (!es.some((e) => e.isIntersecting)) return;
       io.disconnect();
-      box.innerHTML = `<iframe title="EP Divã no Spotify" src="${esc(SITE.links.spotifyEmbed)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
+      box.innerHTML = `<iframe title="Player do Spotify" src="${esc(embed)}?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`;
     }, { rootMargin: '600px' });
     io.observe(box.closest('section'));
-  } else box.remove();
-});
+  });
+
+  /* Vídeos: YouTube + clipes próprios */
+  safe(() => {
+    const yt = (C.youtube || []).filter((v) => v.id);
+    const clips = (C.clips || []).filter((c) => c.video);
+    const [first, ...others] = yt;
+    $('#yt-feature').innerHTML = first ? ytCard(first) : '';
+    $('#yt-grid').innerHTML = others.map(ytCard).join('');
+    $('#clips').innerHTML = clips.map((c) => `
+      <figure class="clip ${c.tall ? 'tall' : 'wide'}">
+        <video controls playsinline preload="none"${c.poster ? ` poster="${esc(c.poster)}"` : ''}>
+          <source src="${esc(c.video)}" type="video/mp4" />
+        </video>
+        ${c.title ? `<figcaption>${esc(c.title)}</figcaption>` : ''}
+      </figure>`).join('');
+    const ct = $('#clips-title');
+    if (ct) ct.hidden = !clips.length;
+    toggleSection('videos', yt.length + clips.length > 0);
+  });
+
+  /* Galeria */
+  safe(() => {
+    gallery = (C.gallery || []).filter((g) => g.thumb || g.full);
+    $('#gallery').innerHTML = gallery.map((g, i) => {
+      const w = g.w || 3, h = g.h || 2;
+      return `
+      <button type="button" class="shot" data-i="${i}" aria-label="Ampliar foto${g.alt ? `: ${esc(g.alt)}` : ''}">
+        <img src="${esc(g.thumb || g.full)}" alt="${esc(g.alt || '')}" loading="lazy" width="${Math.round(w * 100)}" height="${Math.round(h * 100)}" style="aspect-ratio:${w}/${h}" />
+      </button>`;
+    }).join('');
+    toggleSection('fotos', gallery.length > 0);
+  });
+}
+
+/* Aceita o link normal do Spotify (álbum, artista, faixa ou playlist) e devolve o do player */
+function spotifyEmbed(url) {
+  const m = String(url || '').match(/open\.spotify\.com\/(?:intl-[a-z-]+\/)?(?:embed\/)?(album|artist|track|playlist|episode|show)\/([A-Za-z0-9]+)/);
+  return m ? `https://open.spotify.com/embed/${m[1]}/${m[2]}` : '';
+}
 
 /* YouTube: miniatura primeiro, o player só entra quando a pessoa toca */
 function ytCard(v) {
   return `
     <figure class="yt">
-      <button type="button" class="yt-btn" data-yt="${esc(v.id)}" aria-label="Assistir: ${esc(v.title)}">
+      <button type="button" class="yt-btn" data-yt="${esc(v.id)}" aria-label="Assistir: ${esc(v.title || 'vídeo')}">
         <img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" loading="lazy" width="480" height="360" />
         <span class="play" aria-hidden="true"></span>
       </button>
-      <figcaption><span class="kind">${esc(v.kind)}</span>${esc(v.title)}</figcaption>
+      ${v.title || v.kind ? `<figcaption>${v.kind ? `<span class="kind">${esc(v.kind)}</span>` : ''}${esc(v.title || '')}</figcaption>` : ''}
     </figure>`;
 }
-safe(() => {
-  const [first, ...rest] = SITE.youtube;
-  $('#yt-feature').innerHTML = first ? ytCard(first) : '';
-  $('#yt-grid').innerHTML = rest.map(ytCard).join('');
-  document.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-yt]');
-    if (!b) return;
-    const f = document.createElement('iframe');
-    f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0`;
-    f.title = b.getAttribute('aria-label');
-    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-    f.allowFullscreen = true;
-    f.className = 'yt-frame';
-    b.replaceWith(f);
-  });
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-yt]');
+  if (!b) return;
+  const f = document.createElement('iframe');
+  f.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(b.dataset.yt)}?autoplay=1&rel=0`;
+  f.title = b.getAttribute('aria-label');
+  f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  f.allowFullscreen = true;
+  f.className = 'yt-frame';
+  b.replaceWith(f);
 });
-
-/* Clipes próprios */
-safe(() => { $('#clips').innerHTML = SITE.clips.map((c) => `
-  <figure class="clip ${c.tall ? 'tall' : 'wide'}">
-    <video controls playsinline preload="none" poster="${m('thumb/v-' + c.file + '.jpg')}">
-      <source src="${m('video/' + c.file + '.mp4')}" type="video/mp4" />
-    </video>
-    <figcaption>${esc(c.title)}</figcaption>
-  </figure>`).join(''); });
 // um vídeo de cada vez
 document.addEventListener('play', (e) => {
   $$('video').forEach((v) => { if (v !== e.target) v.pause(); });
 }, true);
 
-/* Galeria + ampliação */
+/* Ampliação das fotos da galeria */
+let gallery = [];
 safe(() => {
-  const g = SITE.gallery;
-  $('#gallery').innerHTML = g.map(([n, w, h, alt], i) => `
-    <button type="button" class="shot" data-i="${i}" aria-label="Ampliar foto: ${esc(alt)}">
-      <img src="${m('thumb/' + n + '.jpg')}" alt="${esc(alt)}" loading="lazy" width="${w * 100}" height="${h * 100}" style="aspect-ratio:${w}/${h}" />
-    </button>`).join('');
-
   const lb = $('#lightbox'), img = $('#lb-img'), cap = $('#lb-cap');
+  if (!lb) return;
   let cur = 0;
   const show = (i) => {
+    const g = gallery;
     cur = (i + g.length) % g.length;
-    const [n, , , alt] = g[cur];
-    img.src = m('thumb/' + n + '.jpg');           // aparece na hora
-    const big = new Image();
-    big.onload = () => { if (g[cur][0] === n) img.src = big.src; };
-    big.src = m('web/' + n + '.jpg');
-    img.alt = alt;
-    cap.textContent = `${alt} · ${cur + 1} de ${g.length}`;
+    const it = g[cur];
+    img.src = it.thumb || it.full;                 // aparece na hora
+    if (it.full && it.full !== it.thumb) {
+      const big = new Image();
+      big.onload = () => { if (gallery[cur] === it) img.src = big.src; };
+      big.src = it.full;
+    }
+    img.alt = it.alt || '';
+    cap.textContent = `${it.alt ? `${it.alt} · ` : ''}${cur + 1} de ${g.length}`;
   };
   $('#gallery').addEventListener('click', (e) => {
     const b = e.target.closest('.shot');
     if (!b) return;
-    if (typeof lb.showModal !== 'function') { window.open(m('web/' + g[+b.dataset.i][0] + '.jpg'), '_blank'); return; }
+    const it = gallery[+b.dataset.i];
+    if (typeof lb.showModal !== 'function') { window.open(it.full || it.thumb, '_blank'); return; }
     show(+b.dataset.i);
     lb.showModal();
   });
@@ -227,6 +220,11 @@ safe(() => {
   });
 });
 
+/* Conteúdo do painel */
+rest('magioni_site?id=eq.1&select=content')
+  .then(([row]) => render((row && row.content) || {}))
+  .catch((err) => console.error('Conteúdo do site indisponível', err));
+
 /* Menu no celular e barra do topo */
 safe(() => {
   const btn = $('#menu-btn'), nav = $('#nav'), top = $('#top');
@@ -247,11 +245,8 @@ safe(() => {
 
 /* Cardápio musical: os botões só aparecem quando o artista está recebendo pedidos */
 safe(async () => {
-  const URL_ = 'https://phjfzcfmjnwufjmmjnke.supabase.co/rest/v1/magioni_settings?id=eq.1&select=requests_open,geo_label';
-  const KEY_ = 'sb_publishable_Diqn3xciul137uTioeaLMQ_WuM9jJxE';
   try {
-    const r = await fetch(URL_, { headers: { apikey: KEY_, Authorization: `Bearer ${KEY_}` } });
-    const [row] = await r.json();
+    const [row] = await rest('magioni_settings?id=eq.1&select=requests_open,geo_label');
     const open = !!(row && row.requests_open);
     $$('[data-cardapio]').forEach((el) => { el.hidden = !open; });
     const bar = $('#live-bar');
