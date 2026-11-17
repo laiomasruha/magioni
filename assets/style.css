@@ -296,3 +296,16 @@ footer a { color: var(--muted); }
 
 .dash-tip { position: absolute; z-index: 60; pointer-events: none; background: var(--paper); color: var(--ink); font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.35); max-width: 260px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Logo novo: nome com efeito desgastado (mesma textura do site do artista) */
+.hero h1, .admin-top .logo {
+  -webkit-mask-image: url(/assets/desgaste.png);
+  mask-image: url(/assets/desgaste.png);
+  -webkit-mask-size: 5em auto; mask-size: 5em auto;
+  -webkit-mask-repeat: repeat; mask-repeat: repeat;
+}
+.hero h1 { color: var(--paper); }
+.admin-top .logo { color: var(--paper); display: inline-block; }
+.admin-top .logo b { color: var(--amber); font-weight: inherit; }
+.admin-top h1 { font-size: 28px; }
+.admin-top h1 { white-space: nowrap; font-size: clamp(22px, 6.2vw, 28px); }
