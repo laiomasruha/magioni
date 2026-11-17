@@ -147,7 +147,7 @@ $$('#view-requests [data-status]').forEach((b) =>
 );
 
 async function loadRequests() {
-  let q = sb.from('magioni_requests').select('*').order('created_at', { ascending: state.reqStatus === 'pendente' }).limit(300);
+  let q = sb.from('magioni_requests').select('*').order('created_at', { ascending: false }).limit(500);
   if (state.reqStatus !== 'all') q = q.eq('status', state.reqStatus);
   const [{ data, error }, pend, top] = await Promise.all([
     q,
@@ -173,25 +173,44 @@ async function loadRequests() {
         .join('')}</div>`
     : '';
 
-  $('#req-list').innerHTML = data.length
-    ? data
-        .map(
-          (r) => `
-      <div class="item" data-id="${r.id}">
+  // Agrupa os pedidos da mesma música (e mesmo status): o grupo com o pedido mais recente fica no topo
+  const groups = new Map();
+  for (const r of data) {
+    const key = `${r.song_id || r.song_label}|${r.status}`;
+    if (!groups.has(key)) groups.set(key, { key, label: r.song_label, status: r.status, items: [], last: r.created_at });
+    const g = groups.get(key);
+    g.items.push(r);
+    if (r.created_at > g.last) g.last = r.created_at;
+  }
+  const list = [...groups.values()].sort((a, b) => (a.last < b.last ? 1 : -1));
+  list.forEach((g) => g.items.sort((a, b) => (a.created_at < b.created_at ? 1 : -1)));
+
+  $('#req-list').innerHTML = list.length
+    ? list
+        .map((g) => {
+          const n = g.items.length;
+          const people = g.items.map((r) => `
+            <li>
+              <span class="who">${r.requester_name ? esc(r.requester_name) : 'Alguém'}</span>
+              <span class="item-meta">${timeAgo(r.created_at)}</span>
+              ${r.note ? `<p class="item-note">${esc(r.note)}</p>` : ''}
+            </li>`).join('');
+          return `
+      <div class="item req-group ${n > 1 ? 'multi' : ''}" data-ids="${g.items.map((r) => r.id).join(',')}">
         <div class="item-head">
-          <span class="item-title">${esc(r.song_label)}</span>
-          <span class="status ${r.status}">${r.status}</span>
+          <span class="item-title">${esc(g.label)}</span>
+          <span class="status ${g.status}">${g.status}</span>
         </div>
-        <div class="item-meta">${r.requester_name ? esc(r.requester_name) + ' · ' : ''}${timeAgo(r.created_at)}</div>
-        ${r.note ? `<p class="item-note">${esc(r.note)}</p>` : ''}
+        <p class="req-count">${n > 1 ? `<b>${n}</b> pessoas pediram` : '1 pedido'} · último ${timeAgo(g.last)}</p>
+        <ul class="req-people">${people}</ul>
         <div class="item-actions">
-          ${r.status !== 'tocada' ? '<button class="btn ok small" data-act="tocada">✓ Tocada</button>' : ''}
-          ${r.status !== 'recusada' ? '<button class="btn ghost small" data-act="recusada">Recusar</button>' : ''}
-          ${r.status !== 'pendente' ? '<button class="btn ghost small" data-act="pendente">Voltar p/ fila</button>' : ''}
+          ${g.status !== 'tocada' ? '<button class="btn ok small" data-act="tocada">✓ Tocada</button>' : ''}
+          ${g.status !== 'recusada' ? '<button class="btn ghost small" data-act="recusada">Recusar</button>' : ''}
+          ${g.status !== 'pendente' ? '<button class="btn ghost small" data-act="pendente">Voltar p/ fila</button>' : ''}
           <button class="btn danger small" data-act="delete">Apagar</button>
         </div>
-      </div>`,
-        )
+      </div>`;
+        })
         .join('')
     : '<p class="empty">Nenhum pedido aqui.</p>';
 }
@@ -199,15 +218,15 @@ async function loadRequests() {
 $('#req-list').addEventListener('click', async (e) => {
   const btn = e.target.closest('[data-act]');
   if (!btn) return;
-  const id = btn.closest('.item').dataset.id;
+  const ids = btn.closest('.item').dataset.ids.split(',');
   const act = btn.dataset.act;
   btn.disabled = true;
   let error;
   if (act === 'delete') {
-    if (!confirm('Apagar este pedido?')) { btn.disabled = false; return; }
-    ({ error } = await sb.from('magioni_requests').delete().eq('id', id));
+    if (!confirm(ids.length > 1 ? `Apagar os ${ids.length} pedidos desta música?` : 'Apagar este pedido?')) { btn.disabled = false; return; }
+    ({ error } = await sb.from('magioni_requests').delete().in('id', ids));
   } else {
-    ({ error } = await sb.from('magioni_requests').update({ status: act }).eq('id', id));
+    ({ error } = await sb.from('magioni_requests').update({ status: act }).in('id', ids));
   }
   if (error) toast('Erro ao atualizar.', 'err');
   loadRequests();

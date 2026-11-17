@@ -6,7 +6,7 @@ const ICONS = {
   sp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M7 9.5c3.5-1 7-.6 10 1M7.5 12.8c3-.8 5.8-.4 8.3.9M8 16c2.3-.6 4.4-.3 6.3.7"/></svg>',
 };
 
-const state = { settings: null, cats: [], songs: [], filter: 'all', q: '', selected: null, pos: null, geo: 'idle' };
+const state = { settings: null, cats: [], songs: [], filter: 'all', q: '', selected: null, pos: null, geo: 'idle', played: new Set() };
 const COOLDOWN_MS = 20_000;
 
 async function load() {
@@ -22,6 +22,7 @@ async function load() {
   state.settings = s.data || {};
   state.cats = c.data;
   state.songs = so.data;
+  await loadPlayed();
   renderHeader();
   renderTabs();
   renderList();
@@ -131,6 +132,20 @@ async function refreshSettings() {
   }
 }
 setInterval(() => { if (!document.hidden) refreshSettings(); }, 60_000);
+
+// Músicas que já tocaram neste show: ficam apagadas e não podem ser pedidas de novo
+async function loadPlayed() {
+  const { data, error } = await sb.rpc('magioni_played_song_ids');
+  if (error) return false;
+  const next = new Set((data || []).map((r) => (typeof r === 'string' ? r : r.magioni_played_song_ids || r.song_id)));
+  const changed = next.size !== state.played.size || [...next].some((id) => !state.played.has(id));
+  state.played = next;
+  return changed;
+}
+setInterval(async () => {
+  if (document.hidden || !state.settings?.requests_open) return;
+  if (await loadPlayed()) renderList();
+}, 20_000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshSettings(); });
 
 function renderHeader() {
@@ -196,7 +211,11 @@ function renderList() {
     for (const [artist, list] of byArtist) {
       html.push(`<div class="artist"><div class="artist-name">${esc(artist)}</div><div class="songs">`);
       for (const s of list) {
-        html.push(`<button class="song" type="button" data-id="${s.id}" ${open ? '' : 'disabled'}>${esc(s.title)}</button>`);
+        if (state.played.has(s.id)) {
+          html.push(`<button class="song played" type="button" data-id="${s.id}" disabled aria-label="${esc(s.title)}, já tocou">${esc(s.title)}<span class="song-tag">✓ já tocou</span></button>`);
+        } else {
+          html.push(`<button class="song" type="button" data-id="${s.id}" ${open ? '' : 'disabled'}>${esc(s.title)}</button>`);
+        }
       }
       html.push('</div></div>');
     }
@@ -260,7 +279,14 @@ $('#req-form').addEventListener('submit', async (e) => {
   });
   btn.disabled = false;
   if (error) {
-    toast('Não deu pra enviar o pedido agora. Tente de novo.', 'err');
+    await loadPlayed();
+    if (state.played.has(song.id)) {
+      $('#req-dialog').close();
+      renderList();
+      toast(`${song.title} já tocou neste show. Escolha outra! 🎸`, 'err');
+    } else {
+      toast('Não deu pra enviar o pedido agora. Tente de novo.', 'err');
+    }
     refreshSettings();
     return;
   }
@@ -268,7 +294,39 @@ $('#req-form').addEventListener('submit', async (e) => {
   try { if (name) localStorage.setItem('mg_name', name); } catch { /* ignore */ }
   e.target.elements.note.value = '';
   $('#req-dialog').close();
-  toast(`Pedido enviado: ${song.title} 🎶`);
+  showThanks(song);
+});
+
+/* ───── Agradecimento depois do pedido ───── */
+function showThanks(song) {
+  const st = state.settings || {};
+  const artist = st.artist_name || 'Mag!on!';
+  $('#thanks-text').textContent = `“${song.title}” já está na lista do ${artist}${/[.!?]$/.test(artist) ? '' : '.'} Obrigado pelo pedido!`;
+  const handle = (st.instagram || '').replace(/^@/, '').trim();
+  const ig = $('#thanks-ig');
+  ig.classList.toggle('hidden', !handle);
+  if (handle) {
+    ig.href = `https://instagram.com/${encodeURIComponent(handle)}`;
+    ig.innerHTML = `${ICONS.ig}Seguir @${esc(handle)} no Instagram`;
+  }
+  const pix = $('#thanks-pix');
+  pix.classList.toggle('hidden', !st.pix_key);
+  pix.innerHTML = `${ICONS.pix}Contribuir com um Pix`;
+  $('#thanks-pixkey').classList.add('hidden');
+  const dlg = $('#thanks');
+  if (typeof dlg.showModal === 'function') dlg.showModal();
+  else toast(`Pedido enviado: ${song.title} 🎶`);
+}
+$('#thanks-close').addEventListener('click', () => $('#thanks').close());
+$('#thanks').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+$('#thanks-pix').addEventListener('click', async () => {
+  const key = state.settings?.pix_key;
+  if (!key) return;
+  const box = $('#thanks-pixkey');
+  let copied = false;
+  try { await navigator.clipboard.writeText(key); copied = true; } catch { /* sem permissão */ }
+  box.innerHTML = `${copied ? 'Chave copiada! Cole no app do banco.' : 'Copie a chave no app do banco:'}<strong>${esc(key)}</strong>`;
+  box.classList.remove('hidden');
 });
 
 /* ───── Abas do cardápio ───── */
