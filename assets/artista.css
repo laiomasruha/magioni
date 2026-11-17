@@ -499,3 +499,5 @@ dialog:not([open]) { display: none; }
 @media (max-width: 719px) {
   .facts ul { grid-template-columns: auto; justify-content: center; }
 }
+.foot-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.foot .foot-actions .foot-btn { margin-left: 0; }
