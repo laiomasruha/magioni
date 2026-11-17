@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mag!on! · À la carte</title>
+  <meta name="description" content="Cardápio musical do Mag!on!: escolha sua música e faça seu pedido." />
+  <meta name="theme-color" content="#0f1226" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎸</text></svg>" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">À la carte com</p>
+      <h1 id="artist-name">Mag<span>!</span>on<span>!</span></h1>
+      <p class="tagline" id="tagline">Cardápio musical · Escolha o seu clima</p>
+      <div class="chips" id="links"></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="venue hidden" id="venue" aria-live="polite">
+      <span class="venue-dot" aria-hidden="true"></span>
+      <span class="venue-txt"><span class="venue-kicker">Show acontecendo agora em</span> <strong id="venue-name"></strong></span>
+    </div>
+
+    <section class="block gate hidden" id="gate" aria-live="polite">
+      <p class="gate-icon" id="gate-icon" aria-hidden="true">🎸</p>
+      <h2 id="gate-title">Carregando…</h2>
+      <p class="sub" id="gate-text"></p>
+      <button class="btn hidden" type="button" id="gate-btn"></button>
+    </section>
+
+    <div class="hidden" id="menu">
+      <nav class="mtabs" role="tablist" aria-label="Cardápio">
+        <button class="mtab" role="tab" id="t-musicas" aria-controls="pedido" aria-selected="true">🎵 Músicas</button>
+        <button class="mtab" role="tab" id="t-sugerir" aria-controls="sugerir" aria-selected="false">💡 Sugerir música</button>
+        <button class="mtab" role="tab" id="t-recado" aria-controls="recado" aria-selected="false">💬 Deixar recado</button>
+      </nav>
+
+      <section class="block mpanel" id="pedido" role="tabpanel" aria-labelledby="t-musicas">
+        <h2>Faça seu pedido</h2>
+        <p class="sub">Toque na música que você quer ouvir.</p>
+
+        <div class="sticky">
+          <input class="search" id="search" type="search" placeholder="Buscar música ou artista…" autocomplete="off" aria-label="Buscar música ou artista" />
+          <div class="tabs" id="tabs" role="toolbar" aria-label="Estilos"></div>
+        </div>
+
+        <div id="repertoire"><p class="empty">Carregando repertório…</p></div>
+      </section>
+
+      <section class="block mpanel hidden" id="sugerir" role="tabpanel" aria-labelledby="t-sugerir">
+        <h2>Sugerir música</h2>
+        <p class="sub">Não achou a sua no cardápio? Sugira, e ela pode entrar no repertório.</p>
+        <form class="card" id="suggest-form">
+          <label class="field"><span>Artista ou banda</span>
+            <input class="input" name="artist" maxlength="120" required autocomplete="off" />
+          </label>
+          <label class="field"><span>Música</span>
+            <input class="input" name="title" maxlength="160" required autocomplete="off" />
+          </label>
+          <label class="field"><span>Seu nome (opcional)</span>
+            <input class="input" name="name" maxlength="80" autocomplete="name" />
+          </label>
+          <button class="btn" type="submit">Enviar sugestão</button>
+        </form>
+      </section>
+
+      <section class="block mpanel hidden" id="recado" role="tabpanel" aria-labelledby="t-recado">
+        <h2>Deixar recado</h2>
+        <p class="sub">Elogio, dedicatória, um salve… vai direto pro Mag!on!</p>
+        <form class="card" id="comment-form">
+          <label class="field"><span>Seu nome (opcional)</span>
+            <input class="input" name="name" maxlength="80" autocomplete="name" />
+          </label>
+          <label class="field"><span>Mensagem</span>
+            <textarea class="input" name="message" maxlength="1000" required></textarea>
+          </label>
+          <button class="btn" type="submit">Enviar recado</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+
+  <dialog id="req-dialog" aria-labelledby="dlg-song">
+    <form method="dialog" class="dlg-body" id="req-form">
+      <p class="eyebrow">Seu pedido</p>
+      <p class="dlg-song" id="dlg-song"></p>
+      <p class="dlg-artist" id="dlg-artist"></p>
+      <label class="field"><span>Seu nome (opcional)</span>
+        <input class="input" name="name" maxlength="80" autocomplete="name" />
+      </label>
+      <label class="field"><span>Dedicatória ou recado (opcional)</span>
+        <textarea class="input" name="note" maxlength="500" rows="3"></textarea>
+      </label>
+      <div class="dlg-actions">
+        <button class="btn ghost" value="cancel" type="button" id="dlg-cancel">Cancelar</button>
+        <button class="btn" type="submit" id="dlg-send">Pedir essa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="/assets/public.js"></script>
+</body>
+</html>

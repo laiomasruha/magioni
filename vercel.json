@@ -25,15 +25,6 @@
       ]
     },
     {
-      "source": "/proposta-m7q4x9",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow, noarchive"
-        }
-      ]
-    },
-    {
       "source": "/press-kit",
       "headers": [
         {
@@ -47,6 +38,11 @@
     {
       "source": "/contratante",
       "destination": "/press-kit",
+      "permanent": false
+    },
+    {
+      "source": "/proposta-m7q4x9",
+      "destination": "/",
       "permanent": false
     }
   ]

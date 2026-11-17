@@ -2,7 +2,8 @@
 
 Site do cantor Magioni com cardápio musical.
 
-- **Página pública** (`/`): repertório por estilo, busca, pedido de música (com nome e dedicatória opcionais), recados para o artista, Pix, Instagram e Spotify.
+- **Site oficial** (`/`): apresentação, música, vídeos, fotos, shows e contato. Quando os pedidos estão abertos, mostra a faixa "AO VIVO" que leva ao cardápio.
+- **Cardápio musical** (`/cardapio`): repertório por estilo, busca, pedido de música (com nome e dedicatória opcionais), recados para o artista, Pix, Instagram e Spotify.
 - **Painel** (`/admin`): fila de pedidos (marcar tocada / recusar / apagar, abrir ou fechar pedidos, ranking das mais pedidas), cadastro do repertório (categorias e músicas, esconder sem apagar), recados e configurações (nome, frase, Instagram, Pix, Spotify, EP).
 
 ## Como funciona
@@ -38,7 +39,8 @@ Depois do primeiro deploy, adicione a URL do site em Supabase → Authentication
 ## Arquivos
 
 ```
-index.html          página pública
+index.html          site oficial
+cardapio.html       cardápio musical (pedidos)
 admin.html          painel
 assets/config.js    URL e chave pública do Supabase
 assets/lib.js       cliente Supabase e utilitários
