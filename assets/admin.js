@@ -15,8 +15,9 @@ if (/error_code=/.test(AUTH_LINK)) {
   history.replaceState(null, '', location.pathname);
 }
 // Leva direto para criar a senha
-function askPassword() {
+function askPassword(text) {
   $('.admin-nav .tab[data-view="settings"]').click();
+  if (text) $('#pw-hint').textContent = text;
   $('#pw-hint').classList.remove('hidden');
   const f = $('#password-form');
   f.scrollIntoView({ block: 'center' });
@@ -55,7 +56,10 @@ async function onSession(session) {
   }
   show('app');
   $('#me-email').textContent = session.user.email || '';
-  if (FROM_LINK) askPassword();
+  const tempPw = !!session.user.user_metadata?.temp_password;
+  if (FROM_LINK || tempPw) askPassword(tempPw
+    ? 'Você entrou com uma senha provisória. Crie a sua senha aqui; a provisória deixa de valer na hora.'
+    : null);
   initContratantes(session.user.email);
   initDashboard();
   initSite();
@@ -553,7 +557,7 @@ $('#password-form').addEventListener('submit', async (e) => {
   if (password.length < 8) return toast('A senha precisa ter pelo menos 8 caracteres.', 'err');
   const btn = e.target.querySelector('button');
   btn.disabled = true;
-  const { error } = await sb.auth.updateUser({ password });
+  const { error } = await sb.auth.updateUser({ password, data: { temp_password: false } });
   btn.disabled = false;
   if (error) {
     console.error(error);
