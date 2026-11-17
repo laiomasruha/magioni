@@ -1,4 +1,4 @@
-import { sb, $, $$, esc, toast, timeAgo } from './lib.js';
+import { sb, $, $$, esc, toast, timeAgo, autoUpdate } from './lib.js';
 import { initContratantes } from './admin-contratantes.js';
 import { initDashboard, loadDashboard } from './admin-dashboard.js';
 import { initSite } from './admin-site.js';
@@ -594,5 +594,6 @@ $('#password-form').addEventListener('submit', async (e) => {
 });
 
 boot();
+autoUpdate(['/admin', '/assets/admin.js', '/assets/admin-site.js', '/assets/admin-dashboard.js', '/assets/admin-contratantes.js', '/assets/lib.js', '/assets/style.css']);
 
 document.addEventListener('magioni:repertoire-changed', () => loadRepertoire());

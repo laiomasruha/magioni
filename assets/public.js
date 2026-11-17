@@ -1,4 +1,4 @@
-import { sb, $, $$, esc, norm, toast } from './lib.js';
+import { sb, $, $$, esc, norm, toast, autoUpdate } from './lib.js';
 
 const ICONS = {
   ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
@@ -399,3 +399,4 @@ try {
 } catch { /* ignore */ }
 
 load();
+autoUpdate(['/cardapio', '/assets/public.js', '/assets/lib.js', '/assets/style.css']);

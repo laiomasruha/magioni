@@ -45,6 +45,7 @@ function normalize(c) {
 /* ───── Estado de "alterações não salvas" ───── */
 function setDirty(v) {
   dirty = v;
+  window.__noAutoReload = v; // não recarrega com alterações não salvas
   $('#site-save').disabled = !v;
   $('#site-dirty').textContent = v ? 'Não salvo' : 'Tudo salvo';
   $('#site-save-bar').classList.toggle('dirty', v);

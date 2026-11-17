@@ -38,3 +38,35 @@ export function timeAgo(iso) {
   if (h < 24) return `há ${h} h`;
   return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
+
+/* Página aberta por horas (painel, cardápio no show): quando sai uma versão nova do site,
+   recarrega sozinha para não ficar rodando o código antigo. Compara o ETag dos arquivos. */
+export function autoUpdate(files, { every = 60_000 } = {}) {
+  const tags = new Map();
+  const etag = async (f) => {
+    try {
+      const r = await fetch(f, { method: 'HEAD', cache: 'no-store' });
+      return r.ok ? r.headers.get('etag') || r.headers.get('last-modified') : null;
+    } catch { return null; }
+  };
+  const busy = () => {
+    const el = document.activeElement;
+    return (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) || document.querySelector('dialog[open]');
+  };
+  const check = async () => {
+    if (document.hidden) return;
+    for (const f of files) {
+      const t = await etag(f);
+      if (!t) continue;
+      if (!tags.has(f)) { tags.set(f, t); continue; }
+      if (tags.get(f) !== t) {
+        if (busy() || window.__noAutoReload) return; // tenta de novo depois, sem atrapalhar quem está digitando
+        location.reload();
+        return;
+      }
+    }
+  };
+  check();
+  setInterval(check, every);
+  document.addEventListener('visibilitychange', check);
+}
