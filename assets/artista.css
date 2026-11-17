@@ -519,3 +519,20 @@ html.menu-open, html.menu-open body { overflow: hidden; }
   .nav a { font-size: clamp(2rem, 9.5vw, 3rem); padding: 2px 0; }
   .top.menu-open .top-cta { display: none; }
 }
+
+/* Botão fixo: voltar ao início */
+.to-top {
+  position: fixed; z-index: 45;
+  right: max(16px, env(safe-area-inset-right)); bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--amber); color: var(--amber-ink);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+  opacity: 0; transform: translateY(14px) scale(.9); pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease, background-color .15s;
+}
+.to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+.to-top:hover { background: #ffc85c; }
+.to-top:focus-visible { outline: 3px solid var(--paper); outline-offset: 3px; }
+.to-top svg { width: 24px; height: 24px; }
+html.menu-open .to-top { opacity: 0; pointer-events: none; }

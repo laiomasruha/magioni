@@ -256,3 +256,18 @@ safe(async () => {
     $$('[data-cardapio]').forEach((el) => { el.hidden = !open; });
   } catch { /* sem conexão: mantém escondido */ }
 });
+
+/* Botão fixo "voltar ao início": aparece depois da abertura */
+safe(() => {
+  const btn = $('#to-top');
+  if (!btn) return;
+  const update = () => btn.classList.toggle('show', window.scrollY > window.innerHeight * 0.8);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    history.replaceState(null, '', location.pathname + location.search);
+  });
+});
