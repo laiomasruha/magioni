@@ -401,3 +401,8 @@ dialog.sheet {
 .req-people li { padding: 8px 10px; border-radius: 10px; background: var(--ink); border: 1px solid var(--line); }
 .req-people .who { font-weight: 600; margin-right: 6px; }
 .req-people .item-note { margin-top: 4px; }
+
+/* Pedidos: contador de tempo e "Mais pedidas" no fim */
+.req-count .wait { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: var(--paper); }
+.req-count .wait.pendente { color: var(--amber); }
+.top-songs-card { margin-top: 18px; }

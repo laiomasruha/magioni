@@ -172,18 +172,20 @@ async function loadRequests() {
         .map(([label, c]) => `<span class="chip">${esc(label)} · ${c}</span>`)
         .join('')}</div>`
     : '';
+  $('#top-songs').classList.toggle('hidden', !ranking.length);
 
-  // Agrupa os pedidos da mesma música (e mesmo status): o grupo com o pedido mais recente fica no topo
+  // Agrupa os pedidos da mesma música (e mesmo status). Ordem: quem pediu primeiro aparece primeiro
   const groups = new Map();
   for (const r of data) {
     const key = `${r.song_id || r.song_label}|${r.status}`;
-    if (!groups.has(key)) groups.set(key, { key, label: r.song_label, status: r.status, items: [], last: r.created_at });
+    if (!groups.has(key)) groups.set(key, { key, label: r.song_label, status: r.status, items: [], first: r.created_at, last: r.created_at });
     const g = groups.get(key);
     g.items.push(r);
+    if (r.created_at < g.first) g.first = r.created_at;
     if (r.created_at > g.last) g.last = r.created_at;
   }
-  const list = [...groups.values()].sort((a, b) => (a.last < b.last ? 1 : -1));
-  list.forEach((g) => g.items.sort((a, b) => (a.created_at < b.created_at ? 1 : -1)));
+  const list = [...groups.values()].sort((a, b) => (a.first > b.first ? 1 : -1));
+  list.forEach((g) => g.items.sort((a, b) => (a.created_at > b.created_at ? 1 : -1)));
 
   $('#req-list').innerHTML = list.length
     ? list
@@ -192,7 +194,7 @@ async function loadRequests() {
           const people = g.items.map((r) => `
             <li>
               <span class="who">${r.requester_name ? esc(r.requester_name) : 'Alguém'}</span>
-              <span class="item-meta">${timeAgo(r.created_at)}</span>
+              <span class="item-meta ago" data-t="${r.created_at}">${timeAgo(r.created_at)}</span>
               ${r.note ? `<p class="item-note">${esc(r.note)}</p>` : ''}
             </li>`).join('');
           return `
@@ -201,7 +203,7 @@ async function loadRequests() {
           <span class="item-title">${esc(g.label)}</span>
           <span class="status ${g.status}">${g.status}</span>
         </div>
-        <p class="req-count">${n > 1 ? `<b>${n}</b> pessoas pediram` : '1 pedido'} · último ${timeAgo(g.last)}</p>
+        <p class="req-count"><span class="wait ${g.status}">⏱ <span class="ago" data-t="${g.first}">${timeAgo(g.first)}</span></span> ${n > 1 ? `· <b>${n}</b> pessoas pediram` : ''}</p>
         <ul class="req-people">${people}</ul>
         <div class="item-actions">
           ${g.status !== 'tocada' ? '<button class="btn ok small" data-act="tocada">✓ Tocada</button>' : ''}
@@ -214,6 +216,11 @@ async function loadRequests() {
         .join('')
     : '<p class="empty">Nenhum pedido aqui.</p>';
 }
+
+// Atualiza os contadores de tempo ("há 10 min") sem recarregar a lista
+setInterval(() => {
+  $$('.ago[data-t]').forEach((el) => { el.textContent = timeAgo(el.dataset.t); });
+}, 20000);
 
 $('#req-list').addEventListener('click', async (e) => {
   const btn = e.target.closest('[data-act]');

@@ -35,7 +35,7 @@ export function timeAgo(iso) {
   const m = Math.floor(s / 60);
   if (m < 60) return `há ${m} min`;
   const h = Math.floor(m / 60);
-  if (h < 24) return `há ${h} h`;
+  if (h < 24) return m % 60 ? `há ${h} h ${m % 60} min` : `há ${h} h`;
   return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
 }
 
